@@ -4,9 +4,9 @@ import com.mmobite.as.network.packet.ReceiveDummyPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReceivePongPacketReceive extends ReceiveDummyPacket {
+public class ReceivePingPacket extends ReceiveDummyPacket {
 
-    private static Logger log = LoggerFactory.getLogger(ReceivePongPacketReceive.class.getName());
+    private static Logger log = LoggerFactory.getLogger(ReceivePingPacket.class.getName());
 
     @Override
     public boolean read() {
@@ -16,8 +16,8 @@ public class ReceivePongPacketReceive extends ReceiveDummyPacket {
 
     @Override
     public void run() {
-        log.debug("Receive pong");
-        // do nothing
+        log.debug("Receive ping");
+        new SendPongPacket(this).sendPacket();
     }
 
 }
