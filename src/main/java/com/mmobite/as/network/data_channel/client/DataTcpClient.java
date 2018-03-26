@@ -1,5 +1,7 @@
 package com.mmobite.as.network.data_channel.client;
 
+import com.mmobite.as.api.model.GameSessionInfo;
+import com.mmobite.as.api.model.NetworkSessionInfo;
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.data_channel.handlers.SendVersionPacket;
 import io.netty.bootstrap.Bootstrap;
@@ -66,7 +68,12 @@ public class DataTcpClient {
     }
 
     public void closeSession() {
+    }
 
+    public void sendNetworkSessionInfo(NetworkSessionInfo info) {
+    }
+
+    public static final void sendGameSessionInfo(GameSessionInfo info) {
     }
 
     public void sendPacketData(int direction, byte[] data, int offset, int size) {

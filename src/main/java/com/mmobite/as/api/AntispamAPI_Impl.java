@@ -1,5 +1,7 @@
 package com.mmobite.as.api;
 
+import com.mmobite.as.api.model.GameSessionInfo;
+import com.mmobite.as.api.model.NetworkSessionInfo;
 import com.mmobite.as.network.ctrl_channel.client.CtrlTcpClient;
 import com.mmobite.as.network.data_channel.client.DataTcpClient;
 
@@ -43,13 +45,14 @@ public class AntispamAPI_Impl {
         return (client != null) ? true : false;
     }
 
-    public static final void openGameSession(long sessionId)
+    public static final void openGameSession(long sessionId, NetworkSessionInfo info)
     {
         DataTcpClient client = new DataTcpClient();
         if (client == null)
             return;
 
         addClient(sessionId, client);
+        client.sendNetworkSessionInfo(info);
     }
 
     public static final void closeGameSession(long sessionId)
@@ -61,6 +64,15 @@ public class AntispamAPI_Impl {
         client.closeSession();  // try_reconnect = false
 
         removeClient(sessionId);
+    }
+
+    public static final void sendGameSessionInfo(long sessionId, GameSessionInfo info)
+    {
+        DataTcpClient client = getClient(sessionId);
+        if (client == null)
+            return;
+
+        client.sendGameSessionInfo(info);
     }
 
     public static final void sendPacketData(long sessionId, int direction, byte[] data, int offset, int size)
