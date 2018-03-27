@@ -49,13 +49,11 @@ public class AntispamAPI_Impl {
 
     public static final void closeGameSession(long sessionId)
     {
-        DataClient client = getClient(sessionId);
+        DataClient client = removeClient(sessionId);
         if (client == null)
             return;
 
         client.closeSession();  // try_reconnect = false
-
-        removeClient(sessionId);
     }
 
     public static final void sendGameSessionInfo(long sessionId, GameSessionInfo info)
