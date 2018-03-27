@@ -65,6 +65,7 @@ public class DataClient {
     }
 
     public void tryConnect() {
+
         if (AntispamAPI_Impl.isConnectedToTraceServer()) {
             log.debug("Try to connect to: " + HOST_ + ':' + PORT_);
             bs_.connect();
@@ -92,6 +93,11 @@ public class DataClient {
     }
 
     public void closeSession() {
+        setTryReconnect(false);
+
+        ChannelHandlerContext ctx = getChannel();
+        if (ctx != null)
+            ctx.close();
     }
 
     public void sendGameSessionInfo(GameSessionInfo info) {
@@ -175,5 +181,13 @@ public class DataClient {
 
     public long getGameSessionHandle() {
         return game_session_handle_;
+    }
+
+    public boolean isTryReconnect() {
+        return try_reconnect_;
+    }
+
+    public void setTryReconnect(boolean onOff) {
+        this.try_reconnect_ = onOff;
     }
 }

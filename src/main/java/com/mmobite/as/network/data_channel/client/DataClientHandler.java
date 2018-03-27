@@ -78,6 +78,9 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void channelUnregistered(final ChannelHandlerContext ctx) throws Exception {
+        if (!client_.isTryReconnect())
+            return;
+
         ctx.channel().eventLoop().schedule(new Runnable() {
             @Override
             public void run() {

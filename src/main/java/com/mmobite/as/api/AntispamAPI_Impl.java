@@ -55,7 +55,7 @@ public class AntispamAPI_Impl {
         DataClient client = removeClient(sessionId);
         if (client == null)
             return;
-        client.closeSession();  // try_reconnect = false
+        client.closeSession();
     }
 
     public static final void sendGameSessionInfo(long sessionId, GameSessionInfo info) {
