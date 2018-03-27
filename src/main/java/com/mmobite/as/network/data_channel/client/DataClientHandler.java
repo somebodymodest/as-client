@@ -1,5 +1,7 @@
 package com.mmobite.as.network.data_channel.client;
 
+import com.mmobite.as.api.AntispamAPI;
+import com.mmobite.as.api.AntispamAPI_Impl;
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
 import com.mmobite.as.network.packet.ReceiveDummyPacket;
@@ -78,13 +80,11 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void channelUnregistered(final ChannelHandlerContext ctx) throws Exception {
-        log.debug("Sleeping for: " + ClientProperties.RECONNECT_TIMEOUT + 's');
-
         ctx.channel().eventLoop().schedule(new Runnable() {
             @Override
             public void run() {
                 log.debug("Reconnecting to: " + client_.HOST_ + ':' + client_.PORT_);
-                client_.connect();
+                client_.tryConnect();
             }
         }, ClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
     }

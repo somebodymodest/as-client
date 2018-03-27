@@ -9,8 +9,12 @@ public class AntispamAPI {
         return AntispamAPI_Impl.init(L2ProtocolVersion);
     }
 
-    public static final void openGameSession(long sessionId, NetworkSessionInfo info) {
-        AntispamAPI_Impl.openGameSession(sessionId, info);
+    /**
+     * @param info
+     * @return session handle
+     */
+    public static final long openGameSession(NetworkSessionInfo info) {
+        return AntispamAPI_Impl.openGameSession(info);
     }
 
     public static final void closeGameSession(long sessionId) {

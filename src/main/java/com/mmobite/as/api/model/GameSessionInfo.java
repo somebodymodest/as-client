@@ -1,7 +1,6 @@
 package com.mmobite.as.api.model;
 
 public class GameSessionInfo {
-
     public int char_dbid = 0;
     public int account_dbid = 0;
     public String account_name = "";
@@ -22,5 +21,4 @@ public class GameSessionInfo {
 
         return true;
     }
-
 }

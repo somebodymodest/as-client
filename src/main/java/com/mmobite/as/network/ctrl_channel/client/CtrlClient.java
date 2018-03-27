@@ -72,7 +72,7 @@ public class CtrlClient {
         is_connected_.set(onOff);
     }
 
-    public boolean getConnected() {
+    public boolean isConnected() {
         return is_connected_.get();
     }
 }

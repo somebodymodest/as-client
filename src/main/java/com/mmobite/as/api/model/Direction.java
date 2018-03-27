@@ -1,7 +1,7 @@
 package com.mmobite.as.api.model;
 
 public enum Direction {
-    ClientGame(6), GameClient(7);
+    clientgame(6), gameclient(7);
 
     public final int value;
 

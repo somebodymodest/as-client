@@ -8,78 +8,74 @@ import com.mmobite.as.network.data_channel.client.DataClient;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AntispamAPI_Impl {
 
     private static final Map<Long, DataClient> clientMap = new ConcurrentHashMap<>(3000);
-    private static CtrlClient client;
+    private static final AtomicBoolean is_initialized = new AtomicBoolean(false);
+    private static CtrlClient client = null;
 
-    public static DataClient getClient(long sessionId)
-    {
+    public static boolean isConnectedToTraceServer() {
+        return client != null ? client.isConnected() : false;
+    }
+
+    public static DataClient getClient(long sessionId) {
         return clientMap.get(sessionId);
     }
 
-    protected static void addClient(long sessionId, DataClient client)
-    {
+    protected static void addClient(long sessionId, DataClient client) {
         clientMap.put(sessionId, client);
     }
 
-    protected static DataClient removeClient(long sessionId)
-    {
+    protected static DataClient removeClient(long sessionId) {
         return clientMap.remove(sessionId);
     }
 
     /**
-     * TODO: Need safe?
+     * TODO: Need safe? It`s safe now?
+     *
      * @param L2ProtocolVersion -
      * @return -
      */
-    public static final boolean init(int L2ProtocolVersion)
-    {
-        if(client == null)
+    public static final boolean init(int L2ProtocolVersion) {
+        if (is_initialized.compareAndSet(false, true))
             client = new CtrlClient(L2ProtocolVersion);
         return true;
     }
 
-    public static final void openGameSession(long sessionId, NetworkSessionInfo info)
-    {
+    public static long openGameSession(NetworkSessionInfo info) {
         DataClient client = new DataClient(info);
-        addClient(sessionId, client);
+        long game_session_handle = client.getGameSessionHandle();
+        addClient(game_session_handle, client);
+        return game_session_handle;
     }
 
-    public static final void closeGameSession(long sessionId)
-    {
+    public static final void closeGameSession(long sessionId) {
         DataClient client = removeClient(sessionId);
         if (client == null)
             return;
-
         client.closeSession();  // try_reconnect = false
     }
 
-    public static final void sendGameSessionInfo(long sessionId, GameSessionInfo info)
-    {
+    public static final void sendGameSessionInfo(long sessionId, GameSessionInfo info) {
         DataClient client = getClient(sessionId);
         if (client == null)
             return;
-
         client.sendGameSessionInfo(info);
     }
 
-    public static final void sendPacketData(long sessionId, int direction, byte[] data, int offset, int size)
-    {
+    public static final void sendPacketData(long sessionId, int direction, byte[] data, int offset, int size) {
         DataClient client = getClient(sessionId);
         if (client == null)
             return;
-
         client.sendPacketData(direction, data, offset, size);
     }
 
-    public static final void sendHwid(long sessionId, String hwid)
-    {
+    public static final void sendHwid(long sessionId, String hwid) {
         DataClient client = getClient(sessionId);
         if (client == null)
             return;
-
         client.sendHwid(hwid);
     }
 
