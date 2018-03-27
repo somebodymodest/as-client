@@ -6,51 +6,44 @@ import com.mmobite.as.network.ctrl_channel.client.CtrlClient;
 import com.mmobite.as.network.data_channel.client.DataClient;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AntispamAPI_Impl {
 
-    private static final HashMap<Long, DataClient> clientMap = new HashMap<>(3000);
+    private static final Map<Long, DataClient> clientMap = new ConcurrentHashMap<>(3000);
+    private static CtrlClient client;
 
     public static DataClient getClient(long sessionId)
     {
-        DataClient result;
-
-        synchronized (clientMap)
-        {
-            result = clientMap.get(sessionId);
-        }
-
-        return result;
+        return clientMap.get(sessionId);
     }
 
     protected static void addClient(long sessionId, DataClient client)
     {
-        synchronized (clientMap)
-        {
-            clientMap.put(sessionId, client);
-        }
+        clientMap.put(sessionId, client);
     }
 
-    protected static void removeClient(long sessionId)
+    protected static DataClient removeClient(long sessionId)
     {
-        synchronized (clientMap)
-        {
-            clientMap.remove(sessionId);
-        }
+        return clientMap.remove(sessionId);
     }
 
+    /**
+     * TODO: Need safe?
+     * @param L2ProtocolVersion -
+     * @return -
+     */
     public static final boolean init(int L2ProtocolVersion)
     {
-        CtrlClient client = new CtrlClient(L2ProtocolVersion);
-        return (client != null) ? true : false;
+        if(client == null)
+            client = new CtrlClient(L2ProtocolVersion);
+        return true;
     }
 
     public static final void openGameSession(long sessionId, NetworkSessionInfo info)
     {
         DataClient client = new DataClient(info);
-        if (client == null)
-            return;
-
         addClient(sessionId, client);
     }
 
