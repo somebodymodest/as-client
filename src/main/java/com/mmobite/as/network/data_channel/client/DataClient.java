@@ -13,12 +13,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class DataClient {
@@ -64,18 +62,6 @@ public class DataClient {
         game_session_handle_ = game_session_counter_.incrementAndGet();
 
         tryConnect();
-    }
-
-    public void connect() {
-        bs_.connect().addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
-                if (future.cause() != null) {
-                    handler_.startTime = -1;
-                    log.error("Failed to connect: " + future.cause());
-                }
-            }
-        });
     }
 
     public void tryConnect() {

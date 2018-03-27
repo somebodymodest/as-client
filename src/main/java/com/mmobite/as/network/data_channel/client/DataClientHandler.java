@@ -1,7 +1,5 @@
 package com.mmobite.as.network.data_channel.client;
 
-import com.mmobite.as.api.AntispamAPI;
-import com.mmobite.as.api.AntispamAPI_Impl;
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
 import com.mmobite.as.network.packet.ReceiveDummyPacket;
