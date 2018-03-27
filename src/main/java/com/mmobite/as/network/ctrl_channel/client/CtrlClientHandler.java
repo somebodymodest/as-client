@@ -1,7 +1,7 @@
-package com.mmobite.as.network.data_channel.client;
+package com.mmobite.as.network.ctrl_channel.client;
 
 import com.mmobite.as.network.client.ClientProperties;
-import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
+import com.mmobite.as.network.ctrl_channel.packets.CtrlPacketsManager;
 import com.mmobite.as.network.packet.ReceiveDummyPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -15,30 +15,30 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 @ChannelHandler.Sharable
-public class DataTcpClientHandler extends SimpleChannelInboundHandler<Object> {
+public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
 
-    private static Logger log = LoggerFactory.getLogger(DataTcpClientHandler.class.getName());
+    private static Logger log = LoggerFactory.getLogger(CtrlClientHandler.class.getName());
 
-    private DataTcpClient client_;
+    private CtrlClient client_;
     long startTime = -1;
 
-    public void setClient(DataTcpClient client) {
+    public void setClient(CtrlClient client) {
         client_ = client;
     }
 
-    public DataTcpClient getClient() {
+    public CtrlClient getClient() {
         return client_;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        log.info("Connected to: " + ctx.channel().remoteAddress());
         if (startTime < 0) {
             startTime = System.currentTimeMillis();
         }
-        log.info("Connected to: " + ctx.channel().remoteAddress());
-
-        client_.setChannel(ctx);
-        client_.sendVersionPacket();
+        getClient().setChannel(ctx);
+        getClient().setConnected(true);
+        getClient().sendVersionPacket();
     }
 
     @Override
@@ -46,8 +46,9 @@ public class DataTcpClientHandler extends SimpleChannelInboundHandler<Object> {
         ByteBuf buf = (ByteBuf) msg;
 
         short opcode = (short) buf.readByte();
+        log.info("Got packet opcode[{}]", opcode);
 
-        ReceiveDummyPacket pkt = DataPacketsManager.getPacket(opcode);
+        ReceiveDummyPacket pkt = CtrlPacketsManager.getPacket(opcode);
         pkt.setOpcode(opcode);
         pkt.setBuffer(buf);
         pkt.setChannel(ctx);
@@ -73,7 +74,8 @@ public class DataTcpClientHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelInactive(final ChannelHandlerContext ctx) {
         log.debug("Disconnected from: " + ctx.channel().remoteAddress());
-        client_.setChannel(null);
+        getClient().setConnected(false);
+        getClient().setChannel(null);
     }
 
     @Override

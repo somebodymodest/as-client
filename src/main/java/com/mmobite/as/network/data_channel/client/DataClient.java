@@ -13,22 +13,24 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DataTcpClient {
+public class DataClient {
 
-    private static Logger log = LoggerFactory.getLogger(DataTcpClient.class.getName());
+    private static Logger log = LoggerFactory.getLogger(DataClient.class.getName());
 
     private final static EventLoopGroup loop_ = new NioEventLoopGroup();
-    private final static DataTcpClientHandler handler_ = new DataTcpClientHandler();
+    private final static DataClientHandler handler_ = new DataClientHandler();
     private final Bootstrap bs_;
     public final String HOST_;
     public final int PORT_;
     public final int L2ProtocolVersion_;
     private ChannelHandlerContext ctx_;
+    private NetworkSessionInfo network_session_info_;
 
-    public DataTcpClient() {
+    public DataClient(NetworkSessionInfo info) {
         HOST_ = ClientProperties.SERVER_ADDR;
         PORT_ = ClientProperties.PORT_CTRL;
         L2ProtocolVersion_ = 0;
+        network_session_info_ = info;
 
         bs_ = new Bootstrap();
         bs_.group(loop_)
@@ -36,7 +38,7 @@ public class DataTcpClient {
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .remoteAddress(HOST_, PORT_)
                 .handler(new LoggingHandler(LogLevel.DEBUG))
-                .handler(new DataTcpClientInitializer(handler_));
+                .handler(new DataClientInitializer(handler_));
 
         handler_.setClient(this);
 
@@ -70,10 +72,7 @@ public class DataTcpClient {
     public void closeSession() {
     }
 
-    public void sendNetworkSessionInfo(NetworkSessionInfo info) {
-    }
-
-    public static final void sendGameSessionInfo(GameSessionInfo info) {
+    public void sendGameSessionInfo(GameSessionInfo info) {
     }
 
     public void sendPacketData(int direction, byte[] data, int offset, int size) {

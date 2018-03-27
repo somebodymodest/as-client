@@ -1,4 +1,4 @@
-package com.mmobite.as.network.ctrl_channel.client;
+package com.mmobite.as.network.data_channel.client;
 
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.client.PacketDecoder;
@@ -7,11 +7,11 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 
-public class CtrlTcpClientInitializer extends ChannelInitializer<SocketChannel> {
+public class DataClientInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final CtrlTcpClientHandler handler_;
+    private final DataClientHandler handler_;
 
-    public CtrlTcpClientInitializer(CtrlTcpClientHandler handler) {
+    public DataClientInitializer(DataClientHandler handler) {
         this.handler_ = handler;
     }
 

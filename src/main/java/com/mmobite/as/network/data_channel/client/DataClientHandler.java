@@ -1,8 +1,7 @@
-package com.mmobite.as.network.ctrl_channel.client;
+package com.mmobite.as.network.data_channel.client;
 
 import com.mmobite.as.network.client.ClientProperties;
-import com.mmobite.as.network.ctrl_channel.handlers.SendVersionPacket;
-import com.mmobite.as.network.ctrl_channel.packets.CtrlPacketsManager;
+import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
 import com.mmobite.as.network.packet.ReceiveDummyPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -16,18 +15,18 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 @ChannelHandler.Sharable
-public class CtrlTcpClientHandler extends SimpleChannelInboundHandler<Object> {
+public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
 
-    private static Logger log = LoggerFactory.getLogger(CtrlTcpClientHandler.class.getName());
+    private static Logger log = LoggerFactory.getLogger(DataClientHandler.class.getName());
 
-    private CtrlTcpClient client_;
+    private DataClient client_;
     long startTime = -1;
 
-    public void setClient(CtrlTcpClient client) {
+    public void setClient(DataClient client) {
         client_ = client;
     }
 
-    public CtrlTcpClient getClient() {
+    public DataClient getClient() {
         return client_;
     }
 
@@ -38,8 +37,8 @@ public class CtrlTcpClientHandler extends SimpleChannelInboundHandler<Object> {
         }
         log.info("Connected to: " + ctx.channel().remoteAddress());
 
-        getClient().setChannel(ctx);
-        getClient().sendVersionPacket();
+        client_.setChannel(ctx);
+        client_.sendVersionPacket();
     }
 
     @Override
@@ -48,7 +47,7 @@ public class CtrlTcpClientHandler extends SimpleChannelInboundHandler<Object> {
 
         short opcode = (short) buf.readByte();
 
-        ReceiveDummyPacket pkt = CtrlPacketsManager.getPacket(opcode);
+        ReceiveDummyPacket pkt = DataPacketsManager.getPacket(opcode);
         pkt.setOpcode(opcode);
         pkt.setBuffer(buf);
         pkt.setChannel(ctx);
@@ -74,7 +73,7 @@ public class CtrlTcpClientHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelInactive(final ChannelHandlerContext ctx) {
         log.debug("Disconnected from: " + ctx.channel().remoteAddress());
-        getClient().setChannel(null);
+        client_.setChannel(null);
     }
 
     @Override

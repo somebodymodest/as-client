@@ -11,19 +11,22 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CtrlTcpClient {
+import java.util.concurrent.atomic.AtomicBoolean;
 
-    private static Logger log = LoggerFactory.getLogger(CtrlTcpClient.class.getName());
+public class CtrlClient {
+
+    private static Logger log = LoggerFactory.getLogger(CtrlClient.class.getName());
 
     private final static EventLoopGroup loop_ = new NioEventLoopGroup();
-    private final static CtrlTcpClientHandler handler_ = new CtrlTcpClientHandler();
+    private final static CtrlClientHandler handler_ = new CtrlClientHandler();
     private final Bootstrap bs_;
     public final String HOST_;
     public final int PORT_;
     public final int L2ProtocolVersion_;
     private ChannelHandlerContext ctx_;
+    private final AtomicBoolean is_connected_ = new AtomicBoolean(false);
 
-    public CtrlTcpClient(int L2ProtocolVersion) {
+    public CtrlClient(int L2ProtocolVersion) {
         HOST_ = ClientProperties.SERVER_ADDR;
         PORT_ = ClientProperties.PORT_CTRL;
         L2ProtocolVersion_ = L2ProtocolVersion;
@@ -34,7 +37,7 @@ public class CtrlTcpClient {
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .remoteAddress(HOST_, PORT_)
                 .handler(new LoggingHandler(LogLevel.DEBUG))
-                .handler(new CtrlTcpClientInitializer(handler_));
+                .handler(new CtrlClientInitializer(handler_));
 
         handler_.setClient(this);
 
@@ -65,4 +68,11 @@ public class CtrlTcpClient {
         new SendVersionPacket(ctx_, L2ProtocolVersion_).sendPacket();
     }
 
+    public void setConnected(boolean onOff) {
+        is_connected_.set(onOff);
+    }
+
+    public boolean getConnected() {
+        return is_connected_.get();
+    }
 }
