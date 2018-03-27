@@ -89,7 +89,7 @@ public class DataClient {
     }
 
     public void sendVersionPacket() {
-        new SendVersionPacket(ctx_, L2ProtocolVersion_).sendPacket();
+        new SendVersionPacket(this).sendPacket();
     }
 
     public void closeSession() {
