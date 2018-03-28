@@ -1,6 +1,8 @@
-package com.mmobite.as.network.packet;
+package com.mmobite.as.network.ctrl_channel.handlers;
 
-import io.netty.channel.ChannelHandlerContext;
+import com.mmobite.as.network.client.ITcpClient;
+import com.mmobite.as.network.ctrl_channel.packets.CS_Opcodes;
+import com.mmobite.as.network.packet.ReadPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,12 +13,9 @@ public class ReceiveDummyPacket extends ReadPacket {
 
     private static Logger log = LoggerFactory.getLogger(ReceiveDummyPacket.class.getName());
 
-    public ReceiveDummyPacket() {
-        super();
-    }
-
-    public ReceiveDummyPacket(byte[] bytes, ChannelHandlerContext ctx) {
-        super(bytes, ctx);
+    @Override
+    public short getOpcode() {
+        return CS_Opcodes.dummypacket;
     }
 
     @Override
@@ -25,7 +24,7 @@ public class ReceiveDummyPacket extends ReadPacket {
     }
 
     @Override
-    public void run() {
+    public void run(ITcpClient client) {
         log.error("Called ReceiveDummyPacket opcode=[{}]", getOpcode());
     }
 

@@ -1,7 +1,7 @@
 package com.mmobite.as.network.ctrl_channel.client;
 
 import com.mmobite.as.network.client.ClientProperties;
-import com.mmobite.as.network.ctrl_channel.handlers.SendVersionPacket;
+import com.mmobite.as.network.client.ITcpClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CtrlClient {
+public class CtrlClient extends ITcpClient{
 
     private static Logger log = LoggerFactory.getLogger(CtrlClient.class.getName());
 
@@ -23,7 +23,6 @@ public class CtrlClient {
     public final String HOST_;
     public final int PORT_;
     public final int L2ProtocolVersion_;
-    private ChannelHandlerContext ctx_;
     private final AtomicBoolean is_connected_ = new AtomicBoolean(false);
 
     public CtrlClient(int L2ProtocolVersion) {
@@ -49,23 +48,10 @@ public class CtrlClient {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.cause() != null) {
-                    handler_.startTime = -1;
                     log.error("Failed to connect: " + future.cause());
                 }
             }
         });
-    }
-
-    public void setChannel(ChannelHandlerContext ctx) {
-        ctx_ = ctx;
-    }
-
-    public ChannelHandlerContext getChannel() {
-        return ctx_;
-    }
-
-    public void sendVersionPacket() {
-        new SendVersionPacket(ctx_, L2ProtocolVersion_).sendPacket();
     }
 
     public void setConnected(boolean onOff) {

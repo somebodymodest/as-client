@@ -6,9 +6,8 @@ package com.mmobite.as.network.packet;
  */
 public interface IWritePacket extends INetPacket {
 
-    void write();
+    /**
+     * add payload to buffer
+     */
     void writeBody();
-    void writeHeader();
-    void sendPacket();
-
 }

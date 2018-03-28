@@ -1,8 +1,7 @@
 package com.mmobite.as.network.ctrl_channel.packets;
 
-import com.mmobite.as.network.ctrl_channel.handlers.ReceivePingPacket;
-import com.mmobite.as.network.ctrl_channel.handlers.ReceivePongPacket;
-import com.mmobite.as.network.packet.ReceiveDummyPacket;
+import com.mmobite.as.network.ctrl_channel.handlers.*;
+import com.mmobite.as.network.packet.ReadPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +10,7 @@ public class CtrlPacketsManager {
 
     public static final int protocol_version = 0x01;
 
-    protected final static Map<Short, Class<? extends ReceiveDummyPacket>> packets = new HashMap<>();
+    protected final static Map<Short, Class<? extends ReadPacket>> packets = new HashMap<>();
 
     static {
         packets.put(SC_Opcodes.dummypacket, ReceiveDummyPacket.class);
@@ -19,7 +18,7 @@ public class CtrlPacketsManager {
         packets.put(SC_Opcodes.pongpacket, ReceivePongPacket.class);
     }
 
-    public static ReceiveDummyPacket getPacket(short opcode) {
+    public static ReadPacket getPacket(short opcode) {
         try {
             return packets.get(opcode).newInstance();
         } catch (Exception ex) {

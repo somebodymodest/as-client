@@ -8,26 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public abstract class ReadPacket implements IReadPacket {
 
-    protected short opcode_;
-    protected ByteBuf buf_;
-    protected ChannelHandlerContext ctx_;
-
-    public ReadPacket() {
-    }
-
-    public ReadPacket(ByteBuf buf) {
-        setBuffer(buf);
-    }
-
-    public ReadPacket(ByteBuf buf, ChannelHandlerContext ctx) {
-        setBuffer(buf);
-        setChannel(ctx);
-    }
-
-    public ReadPacket(byte[] bytes, ChannelHandlerContext ctx) {
-        buf_.readBytes(bytes);
-        setChannel(ctx);
-    }
+    public ByteBuf buf_;
 
     public ByteBuf getBuffer() {
         return buf_;
@@ -37,47 +18,35 @@ public abstract class ReadPacket implements IReadPacket {
         buf_ = buf;
     }
 
-    public ChannelHandlerContext getChannel() {
-        return ctx_;
+    public void setBuffer(byte[] bytes) {
+        buf_.readBytes(bytes);
     }
 
-    public void setChannel(ChannelHandlerContext ctx) {
-        ctx_ = ctx;
-    }
-
-    public void setOpcode(short opcode) {
-        opcode_ = opcode;
-    }
-
-    public short getOpcode() {
-        return opcode_;
-    }
-
-    protected int getAvailableBytes() {
+    public int getAvailableBytes() {
         return buf_.readableBytes();
     }
 
-    protected int readC() {
+    public int readC() {
         return buf_.readByte();
     }
 
-    protected int readH() {
+    public int readH() {
         return buf_.readShortLE();
     }
 
-    protected int readD() {
+    public int readD() {
         return buf_.readIntLE();
     }
 
-    protected long readQ() {
+    public long readQ() {
         return buf_.readLongLE();
     }
 
-    protected double readF() {
+    public double readF() {
         return buf_.readDoubleLE();
     }
 
-    protected String readS() {
+    public String readS() {
         StringBuilder sb = new StringBuilder();
         char ch;
         while ((ch = (char) buf_.readShortLE()) != 0)
@@ -85,11 +54,11 @@ public abstract class ReadPacket implements IReadPacket {
         return sb.toString();
     }
 
-    protected void readB(byte[] dst) {
+    public void readB(byte[] dst) {
         buf_.readBytes(dst);
     }
 
-    protected void readB(byte[] dst, int offset, int len) {
+    public void readB(byte[] dst, int offset, int len) {
         buf_.readBytes(dst, offset, len);
     }
 

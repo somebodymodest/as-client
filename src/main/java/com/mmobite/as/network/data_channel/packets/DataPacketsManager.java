@@ -1,7 +1,7 @@
 package com.mmobite.as.network.data_channel.packets;
 
 import com.mmobite.as.network.data_channel.handlers.*;
-import com.mmobite.as.network.packet.ReceiveDummyPacket;
+import com.mmobite.as.network.packet.ReadPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ public class DataPacketsManager {
 
     public static final int protocol_version = 0x03;
 
-    protected final static Map<Short, Class<? extends ReceiveDummyPacket>> packets = new HashMap<>();
+    protected final static Map<Short, Class<? extends ReadPacket>> packets = new HashMap<>();
 
     static {
         packets.put(SC_Opcodes.dummypacket, ReceiveDummyPacket.class);
@@ -22,7 +22,7 @@ public class DataPacketsManager {
         packets.put(SC_Opcodes.starttraceopcodepacket, ReceiveStartTraceOpcodePacket.class);
     }
 
-    public static ReceiveDummyPacket getPacket(short opcode) {
+    public static ReadPacket getPacket(short opcode) {
         try {
             return packets.get(opcode).newInstance();
         } catch (Exception ex) {

@@ -4,22 +4,24 @@ import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
-import com.mmobite.as.network.packet.SendDummyPacket;
-import io.netty.channel.ChannelHandlerContext;
+import com.mmobite.as.network.packet.WritePacket;
 
-public class SendVersionPacket extends SendDummyPacket {
+public class SendVersionPacket extends WritePacket {
 
     private DataClient client_;
 
     public SendVersionPacket(DataClient client) {
-        super(client.getChannel());
-        setOpcode(CS_Opcodes.versionpacket);
         client_ = client;
+        setBuffer(client_.getChannel().alloc().buffer(256));
+    }
+
+    @Override
+    public short getOpcode() {
+        return CS_Opcodes.versionpacket;
     }
 
     @Override
     public void writeBody() {
-
         // c - opcode
         // h - nTraceProtocolId
         // h - nWorldId !!! world_id should be equal 0

@@ -1,8 +1,9 @@
 package com.mmobite.as.network.ctrl_channel.client;
 
 import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.ctrl_channel.handlers.SendVersionPacket;
 import com.mmobite.as.network.ctrl_channel.packets.CtrlPacketsManager;
-import com.mmobite.as.network.packet.ReceiveDummyPacket;
+import com.mmobite.as.network.packet.ReadPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,7 +21,6 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
     private static Logger log = LoggerFactory.getLogger(CtrlClientHandler.class.getName());
 
     private CtrlClient client_;
-    long startTime = -1;
 
     public void setClient(CtrlClient client) {
         client_ = client;
@@ -33,28 +33,27 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         log.info("Connected to: " + ctx.channel().remoteAddress());
-        if (startTime < 0) {
-            startTime = System.currentTimeMillis();
-        }
-        getClient().setChannel(ctx);
+
+        getClient().setChannel(ctx.channel());
         getClient().setConnected(true);
-        getClient().sendVersionPacket();
+        getClient().sendPacket(new SendVersionPacket(getClient()));
     }
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+
+        log.info("channelRead0 enter");
+
         ByteBuf buf = (ByteBuf) msg;
 
         short opcode = (short) buf.readByte();
         log.info("Got packet opcode[{}]", opcode);
 
-        ReceiveDummyPacket pkt = CtrlPacketsManager.getPacket(opcode);
-        pkt.setOpcode(opcode);
+        ReadPacket pkt = CtrlPacketsManager.getPacket(opcode);
         pkt.setBuffer(buf);
-        pkt.setChannel(ctx);
 
         if (pkt.read())
-            pkt.run();
+            pkt.run(getClient());
     }
 
     @Override
@@ -85,8 +84,8 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
         ctx.channel().eventLoop().schedule(new Runnable() {
             @Override
             public void run() {
-                log.debug("Reconnecting to: " + client_.HOST_ + ':' + client_.PORT_);
-                client_.connect();
+                log.debug("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
+                getClient().connect();
             }
         }, ClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
     }

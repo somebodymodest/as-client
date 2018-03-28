@@ -2,6 +2,7 @@ package com.mmobite.as.network.data_channel.client;
 
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.client.PacketDecoder;
+import com.mmobite.as.network.client.PacketEncoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -25,6 +26,7 @@ public class DataClientInitializer extends ChannelInitializer<SocketChannel> {
 
         // Add the number codec first,
         pipeline.addLast(new PacketDecoder());
+        pipeline.addLast(new PacketEncoder());
 
         // and then business logic.
         pipeline.addLast(handler_);

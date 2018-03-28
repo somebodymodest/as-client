@@ -6,6 +6,7 @@ import com.mmobite.as.api.model.GameSessionInfo;
 import com.mmobite.as.api.model.NetworkSessionInfo;
 import com.mmobite.as.api.model.PacketEx;
 import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.ITcpClient;
 import com.mmobite.as.network.data_channel.handlers.SendVersionPacket;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class DataClient {
+public class DataClient extends ITcpClient{
 
     // static
     private static Logger log = LoggerFactory.getLogger(DataClient.class.getName());
@@ -32,7 +33,6 @@ public class DataClient {
     public final String HOST_;
     public final int PORT_;
     public final int L2ProtocolVersion_;
-    private ChannelHandlerContext ctx_;
     private NetworkSessionInfo network_session_info_;
     private boolean try_reconnect_ = true;
 
@@ -80,22 +80,10 @@ public class DataClient {
         }
     }
 
-    public void setChannel(ChannelHandlerContext ctx) {
-        ctx_ = ctx;
-    }
-
-    public ChannelHandlerContext getChannel() {
-        return ctx_;
-    }
-
-    public void sendVersionPacket() {
-        new SendVersionPacket(this).sendPacket();
-    }
-
     public void closeSession() {
         setTryReconnect(false);
 
-        ChannelHandlerContext ctx = getChannel();
+        Channel ctx = getChannel();
         if (ctx != null)
             ctx.close();
     }

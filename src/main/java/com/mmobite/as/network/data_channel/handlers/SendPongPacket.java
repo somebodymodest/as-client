@@ -1,13 +1,26 @@
 package com.mmobite.as.network.data_channel.handlers;
 
+import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
-import com.mmobite.as.network.packet.ReceiveDummyPacket;
-import com.mmobite.as.network.packet.SendDummyPacket;
+import com.mmobite.as.network.packet.WritePacket;
+import io.netty.buffer.ByteBuf;
 
-public class SendPongPacket extends SendDummyPacket {
-    SendPongPacket(ReceiveDummyPacket request) {
-        super(request);
+public class SendPongPacket extends WritePacket {
 
-        setOpcode(CS_Opcodes.pongpacket);
+    private DataClient client_;
+
+    public SendPongPacket(DataClient client) {
+        client_ = client;
+        setBuffer(client_.getChannel().alloc().buffer(256));
+    }
+
+    @Override
+    public short getOpcode() {
+        return CS_Opcodes.pongpacket;
+    }
+
+    @Override
+    public void writeBody() {
+
     }
 }

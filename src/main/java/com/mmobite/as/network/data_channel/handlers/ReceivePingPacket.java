@@ -1,12 +1,20 @@
 package com.mmobite.as.network.data_channel.handlers;
 
-import com.mmobite.as.network.packet.ReceiveDummyPacket;
+import com.mmobite.as.network.client.ITcpClient;
+import com.mmobite.as.network.data_channel.client.DataClient;
+import com.mmobite.as.network.data_channel.packets.SC_Opcodes;
+import com.mmobite.as.network.packet.ReadPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReceivePingPacket extends ReceiveDummyPacket {
+public class ReceivePingPacket extends ReadPacket {
 
     private static Logger log = LoggerFactory.getLogger(ReceivePingPacket.class.getName());
+
+    @Override
+    public short getOpcode() {
+        return SC_Opcodes.pingpacket;
+    }
 
     @Override
     public boolean read() {
@@ -15,9 +23,8 @@ public class ReceivePingPacket extends ReceiveDummyPacket {
     }
 
     @Override
-    public void run() {
-        log.debug("Receive ping");
-        new SendPongPacket(this).sendPacket();
+    public void run(ITcpClient client) {
+        log.debug("ReceivePingPacket");
+        client.sendPacket(new SendPongPacket((DataClient) client));
     }
-
 }

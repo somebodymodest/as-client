@@ -1,6 +1,6 @@
 package com.mmobite.as.network.managers;
 
-import com.mmobite.as.network.packet.ReceiveDummyPacket;
+import com.mmobite.as.network.data_channel.handlers.ReceiveDummyPacket;
 
 import java.util.HashMap;
 import java.util.Map;
