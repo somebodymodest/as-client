@@ -32,7 +32,7 @@ public class DataClient extends ITcpClient {
     private static Logger log = LoggerFactory.getLogger(DataClient.class.getName());
     private final static EventLoopGroup loop_ = new NioEventLoopGroup();
     private final static DataClientHandler handler_ = new DataClientHandler();
-    private final AtomicLong game_session_counter_ = new AtomicLong(0);
+    private final static AtomicLong game_session_counter_ = new AtomicLong(0);
 
     // network
     private final Bootstrap bs_;
