@@ -13,7 +13,7 @@ public class SendPacketDataPacket extends WritePacket {
 
     public SendPacketDataPacket(DataClient client, int direction, ByteBuffer buf) {
         client_ = client;
-        setBuffer(client_.getChannel().alloc().buffer(buf.position()));
+        setBuffer(client_.getChannel().alloc().buffer(buf.position() + 16/*dddb*/));
         direction_ = direction;
         buf_ = buf;
     }
