@@ -16,14 +16,14 @@ public class PacketEncoder extends MessageToByteEncoder<WritePacket> {
     @Override
     protected void encode(ChannelHandlerContext ctx, WritePacket pkt, ByteBuf out) throws Exception {
 
-        log.debug("enter encode: opcode[{}]", pkt.getOpcode());
+        //log.debug("enter encode: opcode[{}]", pkt.getOpcode());
 
         pkt.writeC((byte) pkt.getOpcode());
         pkt.writeBody();
 
         short dataLength = (short) (pkt.getBuffer().readableBytes());
 
-        log.debug("dataLength: {}", dataLength);
+        //log.debug("dataLength: {}", dataLength);
 
         out.writeShortLE(dataLength + 2);
         out.writeBytes(pkt.getBuffer());

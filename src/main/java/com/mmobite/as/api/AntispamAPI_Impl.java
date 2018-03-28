@@ -5,6 +5,7 @@ import com.mmobite.as.api.model.NetworkSessionInfo;
 import com.mmobite.as.network.ctrl_channel.client.CtrlClient;
 import com.mmobite.as.network.data_channel.client.DataClient;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,11 +66,11 @@ public class AntispamAPI_Impl {
         client.sendGameSessionInfo(info);
     }
 
-    public static final void sendPacketData(long sessionId, int direction, byte[] data, int offset, int size) {
+    public static final void sendPacketData(long sessionId, int direction, ByteBuffer buf) {
         DataClient client = getClient(sessionId);
         if (client == null)
             return;
-        client.sendPacketData(direction, data, offset, size);
+        client.sendPacketData(direction, buf);
     }
 
     public static final void sendHwid(long sessionId, String hwid) {

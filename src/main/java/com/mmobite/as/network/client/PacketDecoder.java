@@ -15,7 +15,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
 
-        log.debug("readableBytes() = {}", in.readableBytes());
+        //log.debug("readableBytes() = {}", in.readableBytes());
 
         // Wait until the length prefix is available.
         if (in.readableBytes() < 2) {
@@ -27,14 +27,14 @@ public class PacketDecoder extends ByteToMessageDecoder {
         // Wait until the whole data is available.
         short dataLength = (short) (in.readShortLE() - 2);
 
-        log.debug("dataLength = {}", dataLength);
+        //log.debug("dataLength = {}", dataLength);
 
         if (in.readableBytes() < dataLength) {
             in.resetReaderIndex();
             return;
         }
 
-        log.debug("got packet!");
+        //log.debug("got packet!");
 
         out.add(in.readBytes(dataLength));
     }

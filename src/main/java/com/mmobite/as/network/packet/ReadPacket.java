@@ -26,11 +26,11 @@ public abstract class ReadPacket implements IReadPacket {
         return buf_.readableBytes();
     }
 
-    public int readC() {
+    public byte readC() {
         return buf_.readByte();
     }
 
-    public int readH() {
+    public short readH() {
         return buf_.readShortLE();
     }
 

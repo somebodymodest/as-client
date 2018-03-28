@@ -1,6 +1,7 @@
 package com.mmobite.as.network.data_channel.handlers;
 
 import com.mmobite.as.network.client.ITcpClient;
+import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.SC_Opcodes;
 import com.mmobite.as.network.packet.ReadPacket;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public class ReceiveStopTracePpacket extends ReadPacket {
     @Override
     public void run(ITcpClient client) {
         log.debug("ReceiveStopTracePpacket");
-        // do nothing
+        DataClient c = (DataClient)client;
+        c.setBlocked(true);
     }
 }

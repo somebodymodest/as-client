@@ -3,6 +3,8 @@ package com.mmobite.as.api;
 import com.mmobite.as.api.model.GameSessionInfo;
 import com.mmobite.as.api.model.NetworkSessionInfo;
 
+import java.nio.ByteBuffer;
+
 public class AntispamAPI {
 
     public static final boolean init(int L2ProtocolVersion) {
@@ -26,8 +28,8 @@ public class AntispamAPI {
     }
 
     // ByteBuffer vs {byte[] data, int offset, int size}
-    public static final void sendPacketData(long sessionId, int direction, byte[] data, int offset, int size) {
-        AntispamAPI_Impl.sendPacketData(sessionId, direction, data, offset, size);
+    public static final void sendPacketData(long sessionId, int direction, ByteBuffer buf) {
+        AntispamAPI_Impl.sendPacketData(sessionId, direction, buf);
     }
 
     public static final void sendHwid(long sessionId, String hwid) {
