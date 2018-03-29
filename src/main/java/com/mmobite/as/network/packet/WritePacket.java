@@ -8,6 +8,7 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public abstract class WritePacket implements IWritePacket {
 
+    protected final int default_buffer_size_ = 3/*length + opcode*/ + 256/*payload*/;
     protected ByteBuf buf_;
 
     public ByteBuf getBuffer() {

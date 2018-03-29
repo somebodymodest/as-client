@@ -5,6 +5,7 @@ import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
 import com.mmobite.as.network.packet.WritePacket;
+import io.netty.buffer.Unpooled;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -15,8 +16,8 @@ public class SendVersionPacket extends WritePacket {
     private DataClient client_;
 
     public SendVersionPacket(DataClient client) {
+        setBuffer(Unpooled.buffer(default_buffer_size_));
         client_ = client;
-        setBuffer(client_.getChannel().alloc().buffer(256));
     }
 
     @Override

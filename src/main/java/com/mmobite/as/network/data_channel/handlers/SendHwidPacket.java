@@ -3,6 +3,7 @@ package com.mmobite.as.network.data_channel.handlers;
 import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
 import com.mmobite.as.network.packet.WritePacket;
+import io.netty.buffer.Unpooled;
 
 public class SendHwidPacket extends WritePacket {
 
@@ -10,8 +11,8 @@ public class SendHwidPacket extends WritePacket {
     private String hwid_;
 
     public SendHwidPacket(DataClient client, String hwid) {
+        setBuffer(Unpooled.buffer(default_buffer_size_));
         client_ = client;
-        setBuffer(client_.getChannel().alloc().buffer(256));
         hwid_ = hwid;
     }
 

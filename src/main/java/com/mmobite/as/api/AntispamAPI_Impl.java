@@ -66,11 +66,11 @@ public class AntispamAPI_Impl {
         client.sendGameSessionInfo(info);
     }
 
-    public static final void sendPacketData(long sessionId, int direction, ByteBuffer buf) {
+    public static final void sendPacketData(long sessionId, int direction, ByteBuffer pkt) {
         DataClient client = getClient(sessionId);
         if (client == null)
             return;
-        client.sendPacketData(direction, buf);
+        client.sendPacketData(direction, pkt);
     }
 
     public static final void sendHwid(long sessionId, String hwid) {

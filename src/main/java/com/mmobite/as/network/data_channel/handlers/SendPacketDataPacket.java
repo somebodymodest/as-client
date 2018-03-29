@@ -3,19 +3,20 @@ package com.mmobite.as.network.data_channel.handlers;
 import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
 import com.mmobite.as.network.packet.WritePacket;
+import io.netty.buffer.Unpooled;
 
 import java.nio.ByteBuffer;
 
 public class SendPacketDataPacket extends WritePacket {
     private DataClient client_;
     private int direction_;
-    private ByteBuffer buf_;
+    private ByteBuffer pkt_;
 
-    public SendPacketDataPacket(DataClient client, int direction, ByteBuffer buf) {
+    public SendPacketDataPacket(DataClient client, int direction, ByteBuffer pkt) {
+        setBuffer(Unpooled.buffer(pkt.remaining() + 16/*dddb*/));
         client_ = client;
-        setBuffer(client_.getChannel().alloc().buffer(buf.position() + 16/*dddb*/));
         direction_ = direction;
-        buf_ = buf;
+        pkt_ = pkt;
     }
 
     @Override
@@ -30,8 +31,10 @@ public class SendPacketDataPacket extends WritePacket {
     */
         writeD(direction_);
         writeD((int) System.currentTimeMillis());
-        writeD(buf_.position());
-        writeB(new byte[buf_.position()]);
+        writeD(pkt_.remaining());
+        byte[] arr = new byte[pkt_.remaining()];
+        pkt_.get(arr, pkt_.position(), pkt_.limit());
+        writeB(arr);
     }
 
     @Override

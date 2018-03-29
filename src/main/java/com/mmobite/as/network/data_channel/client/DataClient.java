@@ -99,14 +99,14 @@ public class DataClient extends ITcpClient {
         game_session_info_ = info;
     }
 
-    public void sendPacketData(int direction, ByteBuffer buf) {
+    public void sendPacketData(int direction, ByteBuffer pkt) {
 
-        byte nOpCode = (byte) buf.getChar(0);
-        short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? buf.getShort(1) : 0;
+        byte nOpCode = (byte) pkt.getChar(0);
+        short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? pkt.getShort(1) : 0;
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
-        sendPacket(new SendPacketDataPacket(this, direction, buf));
+        sendPacket(new SendPacketDataPacket(this, direction, pkt));
     }
 
     public void sendHwid(String hwid) {
