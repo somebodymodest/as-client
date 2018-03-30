@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CtrlPacketsManager {
 
-    public static final int protocol_version = 0x01;
+    public static final int protocol_version = 0x02;
 
     protected final static Map<Short, Class<? extends ReadPacket>> packets = new HashMap<>();
 
