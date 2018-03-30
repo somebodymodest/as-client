@@ -16,7 +16,7 @@ public class SendVersionPacket extends WritePacket {
     private DataClient client_;
 
     public SendVersionPacket(DataClient client) {
-        setBuffer(Unpooled.buffer(default_buffer_size_));
+        super();
         client_ = client;
     }
 
@@ -57,7 +57,7 @@ public class SendVersionPacket extends WritePacket {
         writeD(client_.game_session_info_.char_dbid);
         writeD(client_.game_session_info_.account_dbid);
         writeS(ClientProperties.WORLD_GUID);
-        writeS(client_.game_session_info_.hwid);
+        writes(client_.game_session_info_.hwid);
         writeD(client_.game_session_info_.online_time);
     }
 }

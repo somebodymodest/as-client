@@ -7,7 +7,7 @@ import io.netty.buffer.Unpooled;
 public class SendDummyPacket extends WritePacket {
 
     SendDummyPacket(){
-        setBuffer(Unpooled.buffer(default_buffer_size_));
+        super();
     }
 
     @Override

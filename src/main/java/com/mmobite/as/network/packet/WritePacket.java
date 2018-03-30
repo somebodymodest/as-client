@@ -1,6 +1,7 @@
 package com.mmobite.as.network.packet;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
@@ -8,8 +9,16 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public abstract class WritePacket implements IWritePacket {
 
-    protected final int default_buffer_size_ = 3/*length + opcode*/ + 256/*payload*/;
+    protected final int default_buffer_size_ = 1024;
     protected ByteBuf buf_;
+
+    public WritePacket() {
+        setBuffer(Unpooled.buffer(default_buffer_size_));
+    }
+
+    public WritePacket(int buffer_size) {
+        setBuffer(Unpooled.buffer(buffer_size));
+    }
 
     public ByteBuf getBuffer() {
         return buf_;
@@ -45,6 +54,14 @@ public abstract class WritePacket implements IWritePacket {
             buf_.writeShortLE(value.charAt(i));
         }
         buf_.writeShortLE('\000');
+    }
+
+    public void writes(String value) {
+        int length = value.length();
+        for (int i = 0; i < length; i++) {
+            buf_.writeByte(value.charAt(i));
+        }
+        buf_.writeByte('\0');
     }
 
     public void writeB(byte[] data) {

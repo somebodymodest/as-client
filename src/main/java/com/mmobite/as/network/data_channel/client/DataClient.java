@@ -7,6 +7,7 @@ import com.mmobite.as.api.model.NetworkSessionInfo;
 import com.mmobite.as.api.model.PacketEx;
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.client.ITcpClient;
+import com.mmobite.as.network.data_channel.handlers.SendGameSessionInfoPacket;
 import com.mmobite.as.network.data_channel.handlers.SendHwidPacket;
 import com.mmobite.as.network.data_channel.handlers.SendPacketDataPacket;
 import io.netty.bootstrap.Bootstrap;
@@ -97,6 +98,7 @@ public class DataClient extends ITcpClient {
 
     public void sendGameSessionInfo(GameSessionInfo info) {
         game_session_info_ = info;
+        sendPacket(new SendGameSessionInfoPacket(this));
     }
 
     public void sendPacketData(int direction, ByteBuffer pkt) {

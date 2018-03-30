@@ -13,7 +13,7 @@ public class SendPacketDataPacket extends WritePacket {
     private ByteBuffer pkt_;
 
     public SendPacketDataPacket(DataClient client, int direction, ByteBuffer pkt) {
-        setBuffer(Unpooled.buffer(pkt.remaining() + 16/*dddb*/));
+        super(pkt.remaining() + 16/*dddb*/);
         client_ = client;
         direction_ = direction;
         pkt_ = pkt;
@@ -21,14 +21,14 @@ public class SendPacketDataPacket extends WritePacket {
 
     @Override
     public void writeBody() {
-    /*
-    format: "cdddb"
-        c - opcode
-        d - nDirection (clientgame = 6, gameclient = 7)
-        d - nTickCount
-        d - nPacketSize
-        b(nPacketSize bytes) - la2-packet (first byte is opcode)
-    */
+        /*
+        format: "cdddb"
+            c - opcode
+            d - nDirection (clientgame = 6, gameclient = 7)
+            d - nTickCount
+            d - nPacketSize
+            b(nPacketSize bytes) - la2-packet (first byte is opcode)
+        */
         writeD(direction_);
         writeD((int) System.currentTimeMillis());
         writeD(pkt_.remaining());

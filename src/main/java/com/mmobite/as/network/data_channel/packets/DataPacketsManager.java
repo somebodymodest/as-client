@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DataPacketsManager {
 
-    public static final int protocol_version = 0x03;
+    public static final int protocol_version = 0x04;
 
     protected final static Map<Short, Class<? extends ReadPacket>> packets = new HashMap<>();
 

@@ -11,14 +11,14 @@ public class SendHwidPacket extends WritePacket {
     private String hwid_;
 
     public SendHwidPacket(DataClient client, String hwid) {
-        setBuffer(Unpooled.buffer(default_buffer_size_));
+        super();
         client_ = client;
         hwid_ = hwid;
     }
 
     @Override
     public void writeBody() {
-        writeS(hwid_);
+        writes(hwid_);
     }
 
     @Override

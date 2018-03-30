@@ -11,7 +11,7 @@ public class SendPongPacket extends WritePacket {
     private DataClient client_;
 
     public SendPongPacket(DataClient client) {
-        setBuffer(Unpooled.buffer(default_buffer_size_));
+        super();
         client_ = client;
     }
 

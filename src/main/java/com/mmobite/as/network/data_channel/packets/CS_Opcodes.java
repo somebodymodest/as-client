@@ -57,10 +57,14 @@ public class CS_Opcodes {
     /*
 	format: "csd"
 		c - opcode
+        s - sAccountName[ACCOUNT_NAME_SIZE]
+        s - sCharName[CHARACTER_NAME_SIZE]
+        d - nCharDbId
+        d - nAccountId
 		s - hwid[DB_HWID_SIZE]
 		d - player total online time
 	*/
-    public static final short gameinfopacket = 0x06;
+    public static final short gamesessioninfopacket = 0x06;
 
     public static final short _max = 0x07;
 
