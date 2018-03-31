@@ -104,11 +104,12 @@ public class DataClient extends ITcpClient {
 
     public void sendPacketData(int direction, ByteBuffer pkt) {
 
-        byte nOpCode = pkt.get(0);
+        short nOpCode = (short) (pkt.get(0) & 0xff);
         short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? pkt.getShort(1) : 0;
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
+        log.debug("sendPacketData: direction[{}] OpCode[{}:{}]", direction, nOpCode, nOpCodeEx);
         sendPacket(new SendPacketDataPacket(direction, pkt));
     }
 
