@@ -5,14 +5,13 @@ import com.mmobite.as.network.ctrl_channel.client.CtrlClient;
 import com.mmobite.as.network.ctrl_channel.packets.CS_Opcodes;
 import com.mmobite.as.network.ctrl_channel.packets.CtrlPacketsManager;
 import com.mmobite.as.network.packet.WritePacket;
-import io.netty.buffer.Unpooled;
 
 public class SendVersionPacket extends WritePacket {
 
     private CtrlClient client_;
 
     public SendVersionPacket(CtrlClient client) {
-        setBuffer(Unpooled.buffer(256));
+        super();
         client_ = client;
     }
 

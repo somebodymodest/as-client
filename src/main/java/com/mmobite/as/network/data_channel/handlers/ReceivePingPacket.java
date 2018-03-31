@@ -24,7 +24,7 @@ public class ReceivePingPacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.debug("ReceivePingPacket");
-        client.sendPacket(new SendPongPacket((DataClient) client));
+        //log.debug("ReceivePingPacket");
+        client.sendPacket(new SendPongPacket());
     }
 }

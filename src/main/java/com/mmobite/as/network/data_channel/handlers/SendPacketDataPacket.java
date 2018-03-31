@@ -1,20 +1,16 @@
 package com.mmobite.as.network.data_channel.handlers;
 
-import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
 import com.mmobite.as.network.packet.WritePacket;
-import io.netty.buffer.Unpooled;
 
 import java.nio.ByteBuffer;
 
 public class SendPacketDataPacket extends WritePacket {
-    private DataClient client_;
     private int direction_;
     private ByteBuffer pkt_;
 
-    public SendPacketDataPacket(DataClient client, int direction, ByteBuffer pkt) {
+    public SendPacketDataPacket(int direction, ByteBuffer pkt) {
         super(pkt.remaining() + 16/*dddb*/);
-        client_ = client;
         direction_ = direction;
         pkt_ = pkt;
     }

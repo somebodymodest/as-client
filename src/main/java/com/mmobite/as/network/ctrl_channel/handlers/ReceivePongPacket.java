@@ -23,7 +23,7 @@ public class ReceivePongPacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.debug("Receive pong");
+        //log.debug("Receive pong");
         // do nothing
     }
 }

@@ -2,13 +2,8 @@ package com.mmobite.as.network.data_channel.handlers;
 
 import com.mmobite.as.network.ctrl_channel.packets.CS_Opcodes;
 import com.mmobite.as.network.packet.WritePacket;
-import io.netty.buffer.Unpooled;
 
 public class SendDummyPacket extends WritePacket {
-
-    SendDummyPacket(){
-        super();
-    }
 
     @Override
     public short getOpcode() {

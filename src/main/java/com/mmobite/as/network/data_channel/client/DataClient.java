@@ -45,7 +45,7 @@ public class DataClient extends ITcpClient {
     private boolean try_reconnect_ = true;
 
     // game-protocol
-    private boolean is_blocked_ = true;
+    private boolean is_blocked_ = false;
     private long game_session_handle_;
     boolean[] m_aTracedOpcode_CS = new boolean[0xFF];
     boolean[] m_aTracedOpcodeEx_CS = new boolean[0xFF];
@@ -57,6 +57,7 @@ public class DataClient extends ITcpClient {
         PORT_ = ClientProperties.PORT_DATA;
         L2ProtocolVersion_ = 0;
         network_session_info_ = info;
+        game_session_info_ = new GameSessionInfo();
 
         bs_ = new Bootstrap();
         bs_.group(loop_)
@@ -103,16 +104,16 @@ public class DataClient extends ITcpClient {
 
     public void sendPacketData(int direction, ByteBuffer pkt) {
 
-        byte nOpCode = (byte) pkt.getChar(0);
+        byte nOpCode = pkt.get(0);
         short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? pkt.getShort(1) : 0;
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
-        sendPacket(new SendPacketDataPacket(this, direction, pkt));
+        sendPacket(new SendPacketDataPacket(direction, pkt));
     }
 
     public void sendHwid(String hwid) {
-        sendPacket(new SendHwidPacket(this, hwid));
+        sendPacket(new SendHwidPacket(hwid));
     }
 
     public boolean isBlocked() {

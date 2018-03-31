@@ -41,9 +41,6 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-        log.info("channelRead0 enter");
-
         ByteBuf buf = (ByteBuf) msg;
 
         short opcode = (short) buf.readByte();

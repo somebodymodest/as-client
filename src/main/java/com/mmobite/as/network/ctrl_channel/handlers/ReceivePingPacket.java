@@ -24,8 +24,8 @@ public class ReceivePingPacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.debug("Receive ping");
-        client.sendPacket(new SendPongPacket((CtrlClient) client));
+        //log.debug("Receive ping");
+        client.sendPacket(new SendPongPacket());
     }
 
 }
