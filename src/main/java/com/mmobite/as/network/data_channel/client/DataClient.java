@@ -125,27 +125,39 @@ public class DataClient extends ITcpClient {
     }
 
     public boolean isBlocked(int direction, short nOpCode, short nOpCodeEx) {
-        if (!isBlocked()) return false;
+        boolean global_block = isBlocked();
+        log.debug("global_block[{}] direction[{}] OpCode[{}:{}]", global_block, direction, nOpCode, nOpCodeEx);
+        if (!global_block) return false;
+
+        boolean opcode_block = false;
 
         if (direction == Direction.clientgame.value) {
             if (nOpCode == clientgame_opcode_ex.value) {
-                if (!isValidOpcodeEx(direction, nOpCodeEx)) return true;
-                if (m_aTracedOpcodeEx_CS[nOpCodeEx]) return false;
+                if (!isValidOpcodeEx(direction, nOpCodeEx))
+                    opcode_block = true;
+                else if (m_aTracedOpcodeEx_CS[nOpCodeEx])
+                    opcode_block = false;
             } else {
-                if (!isValidOpcode(direction, nOpCode)) return true;
-                if (m_aTracedOpcode_CS[nOpCode]) return false;
+                if (!isValidOpcode(direction, nOpCode))
+                    opcode_block = true;
+                else if (m_aTracedOpcode_CS[nOpCode])
+                    opcode_block = false;
             }
         } else if (direction == gameclient.value) {
             if (nOpCode == gameclient_opcode_ex.value) {
-                if (!isValidOpcodeEx(direction, nOpCodeEx)) return true;
-                if (m_aTracedOpcodeEx_SC[nOpCodeEx]) return false;
+                if (!isValidOpcodeEx(direction, nOpCodeEx))
+                    opcode_block = true;
+                else if (m_aTracedOpcodeEx_SC[nOpCodeEx])
+                    opcode_block = false;
             } else {
-                if (!isValidOpcode(direction, nOpCode)) return true;
-                if (m_aTracedOpcode_SC[nOpCode]) return false;
+                if (!isValidOpcode(direction, nOpCode))
+                    opcode_block = true;
+                else if (m_aTracedOpcode_SC[nOpCode])
+                    opcode_block = false;
             }
         }
-
-        return true;
+        log.debug("opcode_block[{}] direction[{}] OpCode[{}:{}]", opcode_block, direction, nOpCode, nOpCodeEx);
+        return opcode_block;
     }
 
     public void traceOpcode(int direction, short nOpCode, short nOpCodeEx, boolean nEnable) {
