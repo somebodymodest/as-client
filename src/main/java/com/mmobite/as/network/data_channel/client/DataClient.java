@@ -126,10 +126,10 @@ public class DataClient extends ITcpClient {
 
     public boolean isBlocked(int direction, short nOpCode, short nOpCodeEx) {
         boolean global_block = isBlocked();
-        log.debug("global_block[{}] direction[{}] OpCode[{}:{}]", global_block, direction, nOpCode, nOpCodeEx);
+        log.debug("isBlocked: global_block[{}] direction[{}] OpCode[{}:{}]", global_block, direction, nOpCode, nOpCodeEx);
         if (!global_block) return false;
 
-        boolean opcode_block = false;
+        boolean opcode_block = true;
 
         if (direction == Direction.clientgame.value) {
             if (nOpCode == clientgame_opcode_ex.value) {
@@ -156,11 +156,12 @@ public class DataClient extends ITcpClient {
                     opcode_block = false;
             }
         }
-        log.debug("opcode_block[{}] direction[{}] OpCode[{}:{}]", opcode_block, direction, nOpCode, nOpCodeEx);
+        log.debug("isBlocked: opcode_block[{}] direction[{}] OpCode[{}:{}]", opcode_block, direction, nOpCode, nOpCodeEx);
         return opcode_block;
     }
 
     public void traceOpcode(int direction, short nOpCode, short nOpCodeEx, boolean nEnable) {
+        log.debug("traceOpcode: nEnable[{}] direction[{}] OpCode[{}:{}]", nEnable, direction, nOpCode, nOpCodeEx);
         if (direction == Direction.clientgame.value) {
             if (nOpCode == clientgame_opcode_ex.value) {
                 if (!isValidOpcodeEx(direction, nOpCodeEx)) return;
