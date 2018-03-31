@@ -30,6 +30,7 @@ public class SendVersionPacket extends WritePacket {
 
     @Override
     public void writeBody() {
+        log.debug("writeBody start");
         // c - opcode
         // h - nTraceProtocolId
         // h - nWorldId !!! world_id should be equal 0
@@ -55,6 +56,7 @@ public class SendVersionPacket extends WritePacket {
         writeS(ClientProperties.WORLD_GUID);
         writes(client_.game_session_info_.hwid);
         writeD(client_.game_session_info_.online_time);
+        log.debug("writeBody end");
     }
 
     int string_to_in_addr(String ipv4)
