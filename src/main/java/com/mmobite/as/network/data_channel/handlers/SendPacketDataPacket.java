@@ -34,7 +34,7 @@ public class SendPacketDataPacket extends WritePacket {
         writeD((int) System.currentTimeMillis());
         writeD(pkt_.remaining());
         byte[] arr = new byte[pkt_.remaining()];
-        pkt_.get(arr, pkt_.position(), pkt_.limit());
+        pkt_.get(arr, 0, pkt_.remaining());
         writeB(arr);
         log.debug("SendPacketDataPacket: writeBody end");
     }

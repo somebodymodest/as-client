@@ -65,7 +65,6 @@ public abstract class WritePacket implements IWritePacket {
     }
 
     public void writeB(byte[] data) {
-        buf_.writeIntLE(data.length);
         buf_.writeBytes(data);
     }
 }
