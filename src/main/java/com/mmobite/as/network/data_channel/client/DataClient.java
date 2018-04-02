@@ -19,7 +19,10 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
+import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -102,15 +105,26 @@ public class DataClient extends ITcpClient {
         sendPacket(new SendGameSessionInfoPacket(this));
     }
 
-    public void sendPacketData(int direction, ByteBuffer pkt, int size) {
+    public void sendPacketData(int direction, ByteBuffer buf) {
+        final int size = buf.remaining();
+        final int offset = buf.position();
+        final byte[] data = new byte[size]; int pos = buf.position(); buf.get(data, offset, size); buf.position(pos);
+        sendPacketData(direction, data, 0, size);
+    }
 
-        short nOpCode = (short) (pkt.get(0) & 0xff);
-        short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? pkt.getShort(1) : 0;
+    public void sendPacketData(int direction, byte[] data, int offset, int size) {
+        if(offset + size > data.length)
+            throw new InvalidParameterException();
+
+        final byte[] bytes = Arrays.copyOfRange(data, offset, offset + size);
+
+        short nOpCode = (short) (bytes[0] & 0xff);
+        short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? bytes[1] : 0;
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
         //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
-        sendPacket(new SendPacketDataPacket(direction, pkt, size));
+        sendPacket(new SendPacketDataPacket(direction, bytes, size));
     }
 
     public void sendHwid(String hwid) {

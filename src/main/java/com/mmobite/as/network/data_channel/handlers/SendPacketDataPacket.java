@@ -5,27 +5,25 @@ import com.mmobite.as.network.packet.WritePacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.ByteBuffer;
-
 public class SendPacketDataPacket extends WritePacket {
 
     private static Logger log = LoggerFactory.getLogger(SendVersionPacket.class.getName());
     private int direction_;
-    private byte[] pkt_;
+    private byte[] data_;
     private int size_;
 
-    public SendPacketDataPacket(int direction, ByteBuffer pkt, int size) {
+    public SendPacketDataPacket(int direction, byte[] data, int size) {
         super(size + 16/*dddb*/);
         direction_ = direction;
-        pkt_ = new byte[size]; int pos = pkt.position(); pkt.get(pkt_, 0, size); pkt.position(pos);
+        data_ = data;
         size_ = size;
     }
 
     @Override
     public void writeBody() {
-        int pkt_opcode = pkt_[0] & 0xFF;
+        int pkt_opcode = data_[0] & 0xFF;
         int pkt_length = size_;
-        //log.info("SendPacketDataPacket: writeBody start. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
+        log.info("SendPacketDataPacket: writeBody start. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
         /*
         format: "cdddb"
             c - opcode
@@ -37,7 +35,7 @@ public class SendPacketDataPacket extends WritePacket {
         writeD(direction_);
         writeD((int) System.currentTimeMillis());
         writeD(size_);
-        writeB(pkt_);
+        writeB(data_);
         log.info("SendPacketDataPacket: writeBody end. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
     }
 

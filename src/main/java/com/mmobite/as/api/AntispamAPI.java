@@ -27,9 +27,12 @@ public class AntispamAPI {
         AntispamAPI_Impl.sendGameSessionInfo(sessionId, info);
     }
 
-    // ByteBuffer vs {byte[] data, int offset, int size}
-    public static final void sendPacketData(long sessionId, int direction, ByteBuffer pkt, int size) {
-        AntispamAPI_Impl.sendPacketData(sessionId, direction, pkt, size);
+    public static final void sendPacketData(long sessionId, int direction, ByteBuffer pkt) {
+        AntispamAPI_Impl.sendPacketData(sessionId, direction, pkt);
+    }
+
+    public static final void sendPacketData(long sessionId, int direction, byte[] data, int offset, int size) {
+        AntispamAPI_Impl.sendPacketData(sessionId, direction, data, offset, size);
     }
 
     public static final void sendHwid(long sessionId, String hwid) {
