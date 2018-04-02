@@ -108,7 +108,7 @@ public class DataClient extends ITcpClient {
     public void sendPacketData(int direction, ByteBuffer buf) {
         final int size = buf.remaining();
         final int offset = buf.position();
-        final byte[] data = new byte[size]; int pos = buf.position(); buf.get(data, offset, size); buf.position(pos);
+        final byte[] data = new byte[size]; int pos = buf.position(); buf.get(data, 0, size); buf.position(pos);
         sendPacketData(direction, data, 0, size);
     }
 
