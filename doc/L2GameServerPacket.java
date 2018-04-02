@@ -27,15 +27,15 @@ public abstract class L2GameServerPacket extends SendablePacket<GameClient> impl
 	{
 		try
 		{
-			int bufferPosition = getByteBuffer().position();
+//			int bufferPosition = getByteBuffer().position();
 			writeImpl();
-			if(getClient().getState().ordinal() >= GameClient.GameClientState.AUTHED.ordinal() && getClient().getAntispamSession() > 0) {
-				int limit = getByteBuffer().limit();
-				ByteBuffer byteBuffer = getByteBuffer().asReadOnlyBuffer();
-				byteBuffer.position(bufferPosition);
-				byteBuffer.limit(limit);
-				AntispamAPI.sendPacketData(getClient().getAntispamSession(), Direction.gameclient.value, byteBuffer);
-			}
+//			if(getClient().getState().ordinal() >= GameClient.GameClientState.AUTHED.ordinal() && getClient().getAntispamSession() > 0) {
+//				int limit = getByteBuffer().limit();
+//				ByteBuffer byteBuffer = getByteBuffer().asReadOnlyBuffer();
+//				byteBuffer.position(bufferPosition);
+//				byteBuffer.limit(limit);
+//				AntispamAPI.sendPacketData(getClient().getAntispamSession(), Direction.gameclient.value, byteBuffer);
+//			}
 			return true;
 		}
 		catch(Exception e)

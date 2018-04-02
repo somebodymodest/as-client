@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import com.mmobite.as.api.AntispamAPI;
+import com.mmobite.as.api.model.Direction;
 import com.mmobite.as.api.model.GameSessionInfo;
 import com.mmobite.as.api.model.NetworkSessionInfo;
 import com.mmobite.as.network.client.ClientProperties;
@@ -327,11 +328,11 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 		setState(GameClient.GameClientState.ENTER_GAME);
 		if(antispamSession > 0 && ClientProperties.ENABLED){
 			GameSessionInfo gameSessionInfo = new GameSessionInfo();
-			gameSessionInfo.account_dbid= 1; //TODO: No support source
 			gameSessionInfo.account_name = getLogin();
 			gameSessionInfo.character_name = selectedPlayer.getName();
-			gameSessionInfo.hwid = "";//TODO: no support source
+			gameSessionInfo.hwid = "NO_HWID";//TODO: no support source
 			gameSessionInfo.char_dbid = selectedPlayer.getObjectId();
+			gameSessionInfo.account_dbid = selectedPlayer.getObjectId(); //TODO: same as char_dbid
 			gameSessionInfo.online_time = (int) selectedPlayer.getOnlineTime();
 			AntispamAPI.sendGameSessionInfo(antispamSession, gameSessionInfo);
 		}
@@ -341,6 +342,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 	@Override
 	public boolean encrypt(final ByteBuffer buf, final int size)
 	{
+		AntispamAPI.sendPacketData(this.getAntispamSession(), Direction.gameclient.value, buf.array(), buf.position(), size);
 		_crypt.encrypt(buf.array(), buf.position(), size);
 		buf.position(buf.position() + size);
 		return true;
@@ -349,7 +351,9 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 	@Override
 	public boolean decrypt(ByteBuffer buf, int size)
 	{
-		return _crypt.decrypt(buf.array(), buf.position(), size);
+		boolean success = _crypt.decrypt(buf.array(), buf.position(), size);
+		AntispamAPI.sendPacketData(this.getAntispamSession(), Direction.clientgame.value, buf.array(), buf.position(), size);
+		return success;
 	}
 
 	public void sendPacket(L2GameServerPacket gsp)

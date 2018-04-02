@@ -1333,11 +1333,11 @@ public final class GamePacketHandler implements IPacketHandler<GameClient>, ICli
 		{
 			client.onPacketReadFail();
 		}
-		if(client.getAntispamSession() > 0 && (id == 0x2b || id == 0x0e || client.getState().ordinal() >= GameClient.GameClientState.AUTHED.ordinal())) {
-			ByteBuffer buffer = buf.asReadOnlyBuffer();
-			buffer.position(bufferPosition);
-			AntispamAPI.sendPacketData(client.getAntispamSession(), Direction.clientgame.value, buffer);
-		}
+//		if(client.getAntispamSession() > 0 && (id == 0x2b || id == 0x0e || client.getState().ordinal() >= GameClient.GameClientState.AUTHED.ordinal())) {
+//			ByteBuffer buffer = buf.asReadOnlyBuffer();
+//			buffer.position(bufferPosition);
+//			AntispamAPI.sendPacketData(client.getAntispamSession(), Direction.clientgame.value, buffer);
+//		}
 		return msg;
 	}
 
