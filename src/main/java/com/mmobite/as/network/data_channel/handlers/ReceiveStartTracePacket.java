@@ -12,7 +12,7 @@ public class ReceiveStartTracePacket extends ReadPacket {
     private static Logger log = LoggerFactory.getLogger(ReceiveStartTracePacket.class.getName());
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return SC_Opcodes.starttracepacket;
     }
 
@@ -24,7 +24,7 @@ public class ReceiveStartTracePacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.debug("ReceiveStartTracePacket");
+        log.info("ReceiveStartTracePacket");
         DataClient c = (DataClient)client;
         c.setBlocked(false);
     }

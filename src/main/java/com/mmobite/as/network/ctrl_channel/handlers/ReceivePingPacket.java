@@ -12,7 +12,7 @@ public class ReceivePingPacket extends ReadPacket {
     private static Logger log = LoggerFactory.getLogger(ReceivePingPacket.class.getName());
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return SC_Opcodes.pingpacket;
     }
 

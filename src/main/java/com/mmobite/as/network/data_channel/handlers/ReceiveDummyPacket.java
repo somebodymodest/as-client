@@ -14,7 +14,7 @@ public class ReceiveDummyPacket extends ReadPacket {
     private static Logger log = LoggerFactory.getLogger(ReceiveDummyPacket.class.getName());
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return CS_Opcodes.dummypacket;
     }
 

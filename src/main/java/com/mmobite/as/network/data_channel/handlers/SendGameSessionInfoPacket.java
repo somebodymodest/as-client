@@ -35,7 +35,7 @@ public class SendGameSessionInfoPacket extends WritePacket {
     }
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return CS_Opcodes.gamesessioninfopacket;
     }
 }

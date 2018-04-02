@@ -6,31 +6,31 @@ public class SC_Opcodes {
 	format: "c"
 		c - opcode
     */
-    public static final short dummypacket = 0x00;
+    public static final int dummypacket = 0x00;
 
 	/*
 	format: "c"
 		c - opcode
 	*/
-    public static final short pingpacket = 0x01;
+    public static final int pingpacket = 0x01;
 
 	/*
 	format: "c"
 		c - opcode
 	*/
-    public static final short pongpacket = 0x02;
+    public static final int pongpacket = 0x02;
 
 	/*
 	format: "c"
 		c - opcode
 	*/
-    public static final short stoptracepacket = 0x03;
+    public static final int stoptracepacket = 0x03;
 
 	/*
 	format: "c"
 		c - opcode
 	*/
-    public static final short starttracepacket = 0x04;
+    public static final int starttracepacket = 0x04;
 
 	/*
 	format: "ccch"
@@ -39,7 +39,7 @@ public class SC_Opcodes {
 		c - opcode
 		h - opcode_ex
 	*/
-    public static final short stoptraceopcodepacket	= 0x05;
+    public static final int stoptraceopcodepacket	= 0x05;
 
 	/*
 	format: "ccch"
@@ -48,8 +48,8 @@ public class SC_Opcodes {
 		c - opcode
 		h - opcode_ex
 	*/
-    public static final short starttraceopcodepacket = 0x06;
+    public static final int starttraceopcodepacket = 0x06;
 
-    public static final short _max = 0x07;
+    public static final int _max = 0x07;
 
 }

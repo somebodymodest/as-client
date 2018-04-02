@@ -10,7 +10,7 @@ public class DataPacketsManager {
 
     public static final int protocol_version = 0x04;
 
-    protected final static Map<Short, Class<? extends ReadPacket>> packets = new HashMap<>();
+    protected final static Map<Integer, Class<? extends ReadPacket>> packets = new HashMap<>();
 
     static {
         packets.put(SC_Opcodes.dummypacket, ReceiveDummyPacket.class);
@@ -22,7 +22,7 @@ public class DataPacketsManager {
         packets.put(SC_Opcodes.starttraceopcodepacket, ReceiveStartTraceOpcodePacket.class);
     }
 
-    public static ReadPacket getPacket(short opcode) {
+    public static ReadPacket getPacket(int opcode) {
         try {
             return packets.get(opcode).newInstance();
         } catch (Exception ex) {

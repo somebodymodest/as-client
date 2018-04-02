@@ -11,21 +11,21 @@ public class ReceiveStartTraceOpcodePacket extends ReadPacket {
 
     private static Logger log = LoggerFactory.getLogger(ReceiveStartTraceOpcodePacket.class.getName());
     private byte nDirection;
-    private byte nOpcode;
-    private short nOpcodeEx;
+    private int nOpcode;
+    private int nOpcodeEx;
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return SC_Opcodes.starttraceopcodepacket;
     }
 
     @Override
     public boolean read() {
         nDirection = readC();
-        nOpcode = readC();
+        nOpcode = readC() & 0xFF;
 
         if (nOpcode == DataClient.get_opcode_ex(nDirection))
-            nOpcodeEx = readH();
+            nOpcodeEx = readH() & 0xFFFF;
         else
             nOpcodeEx = 0;
 
@@ -34,7 +34,7 @@ public class ReceiveStartTraceOpcodePacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.debug("ReceiveStartTraceOpcodePacket");
+        log.info("ReceiveStartTraceOpcodePacket nOpcode[{}] nOpcodeEx[{}]", nOpcode, nOpcodeEx);
         DataClient c = (DataClient)client;
         c.traceOpcode(nDirection, nOpcode, nOpcodeEx, true);
     }

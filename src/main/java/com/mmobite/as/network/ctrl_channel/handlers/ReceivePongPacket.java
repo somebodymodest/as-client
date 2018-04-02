@@ -11,7 +11,7 @@ public class ReceivePongPacket extends ReadPacket {
     private static Logger log = LoggerFactory.getLogger(ReceivePongPacket.class.getName());
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return SC_Opcodes.pongpacket;
     }
 

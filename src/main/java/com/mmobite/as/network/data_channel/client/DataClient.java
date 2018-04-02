@@ -64,7 +64,7 @@ public class DataClient extends ITcpClient {
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .remoteAddress(HOST_, PORT_)
-                .handler(new LoggingHandler(LogLevel.DEBUG))
+                .handler(new LoggingHandler(LogLevel.INFO))
                 .handler(new DataClientInitializer(handler_));
 
         handler_.setClient(this);
@@ -76,10 +76,10 @@ public class DataClient extends ITcpClient {
     public void tryConnect() {
 
         if (AntispamAPI_Impl.isConnectedToTraceServer()) {
-            log.debug("Try to connect to: " + HOST_ + ':' + PORT_);
+            log.info("Try to connect to: " + HOST_ + ':' + PORT_);
             bs_.connect();
         } else {
-            log.debug("Try to connect to: wait for ctrl channel");
+            log.info("Try to connect to: wait for ctrl channel");
             loop_.schedule(new Runnable() {
                 @Override
                 public void run() {
@@ -102,15 +102,15 @@ public class DataClient extends ITcpClient {
         sendPacket(new SendGameSessionInfoPacket(this));
     }
 
-    public void sendPacketData(int direction, ByteBuffer pkt) {
+    public void sendPacketData(int direction, ByteBuffer pkt, int size) {
 
         short nOpCode = (short) (pkt.get(0) & 0xff);
         short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? pkt.getShort(1) : 0;
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
-        log.debug("sendPacketData: direction[{}] OpCode[{}:{}]", direction, nOpCode, nOpCodeEx);
-        sendPacket(new SendPacketDataPacket(direction, pkt));
+        //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
+        sendPacket(new SendPacketDataPacket(direction, pkt, size));
     }
 
     public void sendHwid(String hwid) {
@@ -125,9 +125,9 @@ public class DataClient extends ITcpClient {
         is_blocked_ = onOff;
     }
 
-    public boolean isBlocked(int direction, short nOpCode, short nOpCodeEx) {
+    public boolean isBlocked(int direction, int nOpCode, int nOpCodeEx) {
         boolean global_block = isBlocked();
-        log.debug("isBlocked: global_block[{}] direction[{}] OpCode[{}:{}]", global_block, direction, nOpCode, nOpCodeEx);
+        //log.info("isBlocked: global_block[{}] direction[{}] OpCode[{}:{}]", global_block, direction, nOpCode, nOpCodeEx);
         if (!global_block) return false;
 
         boolean opcode_block = true;
@@ -157,12 +157,12 @@ public class DataClient extends ITcpClient {
                     opcode_block = false;
             }
         }
-        log.debug("isBlocked: opcode_block[{}] direction[{}] OpCode[{}:{}]", opcode_block, direction, nOpCode, nOpCodeEx);
+        //log.info("isBlocked: opcode_block[{}] direction[{}] OpCode[{}:{}]", opcode_block, direction, nOpCode, nOpCodeEx);
         return opcode_block;
     }
 
-    public void traceOpcode(int direction, short nOpCode, short nOpCodeEx, boolean nEnable) {
-        log.debug("traceOpcode: nEnable[{}] direction[{}] OpCode[{}:{}]", nEnable, direction, nOpCode, nOpCodeEx);
+    public void traceOpcode(int direction, int nOpCode, int nOpCodeEx, boolean nEnable) {
+        //log.info("traceOpcode: nEnable[{}] direction[{}] OpCode[{}:{}]", nEnable, direction, nOpCode, nOpCodeEx);
         if (direction == Direction.clientgame.value) {
             if (nOpCode == clientgame_opcode_ex.value) {
                 if (!isValidOpcodeEx(direction, nOpCodeEx)) return;
@@ -182,7 +182,7 @@ public class DataClient extends ITcpClient {
         }
     }
 
-    public boolean isValidOpcode(int direction, short nOpCode) {
+    public boolean isValidOpcode(int direction, int nOpCode) {
         if (direction == Direction.clientgame.value) {
             return !(nOpCode < 0 || nOpCode >= m_aTracedOpcode_CS.length);
         } else if (direction == gameclient.value) {
@@ -191,7 +191,7 @@ public class DataClient extends ITcpClient {
         return false;
     }
 
-    public boolean isValidOpcodeEx(int direction, short nOpCodeEx) {
+    public boolean isValidOpcodeEx(int direction, int nOpCodeEx) {
         if (direction == Direction.clientgame.value) {
             return !(nOpCodeEx < 0 || nOpCodeEx >= m_aTracedOpcodeEx_CS.length);
         } else if (direction == gameclient.value) {

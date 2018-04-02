@@ -16,18 +16,29 @@ public class SendVersionPacket extends WritePacket {
     }
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return CS_Opcodes.versionpacket;
     }
 
     @Override
     public void writeBody() {
+        /*
+        format: "chhdssds"
+        c - opcode
+        h - nTraceProtocolId
+        h - nWorldId
+        d - nGameProtocolId
+        s - sLicenseUserName[EMAIL_SIZE]
+        s - sLicenseEmail[EMAIL_SIZE]
+        d - server type (0-PTS, 1-Java)
+        s - sWorldGUID[DB_WORLD_GUID_SIZE]
+        */
         writeH(CtrlPacketsManager.protocol_version);
         writeH(0);
         writeD(client_.L2ProtocolVersion_);
         writeS("license test");
         writeS("email test");
-        writeD(0);
+        writeD(1);
         writeS(ClientProperties.WORLD_GUID);
     }
 }

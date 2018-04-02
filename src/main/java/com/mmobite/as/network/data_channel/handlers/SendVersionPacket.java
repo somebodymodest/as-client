@@ -24,13 +24,13 @@ public class SendVersionPacket extends WritePacket {
     }
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return CS_Opcodes.versionpacket;
     }
 
     @Override
     public void writeBody() {
-        log.debug("writeBody start");
+        //log.debug("writeBody start");
         // c - opcode
         // h - nTraceProtocolId
         // h - nWorldId !!! world_id should be equal 0
@@ -43,8 +43,6 @@ public class SendVersionPacket extends WritePacket {
         // s - sWorldGUID[DB_WORLD_GUID_SIZE]
         // s - sHwid[DB_HWID_SIZE]
         // d - player total online time
-
-
         writeH(DataPacketsManager.protocol_version);
         writeH(0);
         writeD((int) client_.getGameSessionHandle());
@@ -56,7 +54,7 @@ public class SendVersionPacket extends WritePacket {
         writeS(ClientProperties.WORLD_GUID);
         writes(client_.game_session_info_.hwid);
         writeD(client_.game_session_info_.online_time);
-        log.debug("writeBody end");
+        //log.debug("writeBody end");
     }
 
     int string_to_in_addr(String ipv4)

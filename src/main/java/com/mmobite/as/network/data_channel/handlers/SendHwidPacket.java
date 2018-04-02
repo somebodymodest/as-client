@@ -18,7 +18,7 @@ public class SendHwidPacket extends WritePacket {
     }
 
     @Override
-    public short getOpcode() {
+    public int getOpcode() {
         return CS_Opcodes.hwidpacket;
     }
 }

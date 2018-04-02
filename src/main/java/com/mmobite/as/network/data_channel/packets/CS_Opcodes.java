@@ -6,7 +6,7 @@ public class CS_Opcodes {
     format: "c"
         c - opcode
     */
-    public static final short dummypacket = 0x00;
+    public static final int dummypacket = 0x00;
 
     /*
     format: "chhdbssddss"
@@ -23,19 +23,19 @@ public class CS_Opcodes {
         s - sHwid[DB_HWID_SIZE]
         d - player total online time
     */
-    public static final short versionpacket = 0x01;
+    public static final int versionpacket = 0x01;
 
     /*
     format: "c"
         c - opcode
     */
-    public static final short pingpacket = 0x02;
+    public static final int pingpacket = 0x02;
 
     /*
     format: "c"
         c - opcode
     */
-    public static final short pongpacket = 0x03;
+    public static final int pongpacket = 0x03;
 
     /*
     format: "cdddb"
@@ -45,14 +45,14 @@ public class CS_Opcodes {
         d - nPacketSize
         b(nPacketSize bytes) - la2-packet (first byte is opcode)
     */
-    public static final short packetdatapacket = 0x04;
+    public static final int packetdatapacket = 0x04;
 
     /*
 	format: "cs"
 		c - opcode
 		s - hwid[DB_HWID_SIZE]
 	*/
-    public static final short hwidpacket = 0x05;
+    public static final int hwidpacket = 0x05;
 
     /*
 	format: "csd"
@@ -64,8 +64,8 @@ public class CS_Opcodes {
 		s - hwid[DB_HWID_SIZE]
 		d - player total online time
 	*/
-    public static final short gamesessioninfopacket = 0x06;
+    public static final int gamesessioninfopacket = 0x06;
 
-    public static final short _max = 0x07;
+    public static final int _max = 0x07;
 
 }
