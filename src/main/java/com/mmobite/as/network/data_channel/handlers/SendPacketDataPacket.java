@@ -1,6 +1,6 @@
 package com.mmobite.as.network.data_channel.handlers;
 
-import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
+import com.mmobite.as.network.data_channel.packets.OpcodeCS;
 import com.mmobite.as.network.packet.WritePacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +41,6 @@ public class SendPacketDataPacket extends WritePacket {
 
     @Override
     public int getOpcode() {
-        return CS_Opcodes.packetdatapacket;
+        return OpcodeCS.packetdatapacket;
     }
 }

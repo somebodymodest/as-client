@@ -2,7 +2,7 @@ package com.mmobite.as.network.data_channel.handlers;
 
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.data_channel.client.DataClient;
-import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
+import com.mmobite.as.network.data_channel.packets.OpcodeCS;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
 import com.mmobite.as.network.packet.WritePacket;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class SendVersionPacket extends WritePacket {
 
     @Override
     public int getOpcode() {
-        return CS_Opcodes.versionpacket;
+        return OpcodeCS.versionpacket;
     }
 
     @Override

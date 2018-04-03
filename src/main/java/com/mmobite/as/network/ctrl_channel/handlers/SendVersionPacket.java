@@ -2,7 +2,7 @@ package com.mmobite.as.network.ctrl_channel.handlers;
 
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.ctrl_channel.client.CtrlClient;
-import com.mmobite.as.network.ctrl_channel.packets.CS_Opcodes;
+import com.mmobite.as.network.ctrl_channel.packets.OpcodeCS;
 import com.mmobite.as.network.ctrl_channel.packets.CtrlPacketsManager;
 import com.mmobite.as.network.packet.WritePacket;
 
@@ -17,7 +17,7 @@ public class SendVersionPacket extends WritePacket {
 
     @Override
     public int getOpcode() {
-        return CS_Opcodes.versionpacket;
+        return OpcodeCS.versionpacket;
     }
 
     @Override

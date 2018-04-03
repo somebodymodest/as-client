@@ -1,6 +1,6 @@
 package com.mmobite.as.network.ctrl_channel.packets;
 
-public class CS_Opcodes {
+public class OpcodeCS {
 
     /*
     format: "c"

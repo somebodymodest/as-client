@@ -1,7 +1,7 @@
 package com.mmobite.as.network.data_channel.handlers;
 
 import com.mmobite.as.network.data_channel.client.DataClient;
-import com.mmobite.as.network.data_channel.packets.CS_Opcodes;
+import com.mmobite.as.network.data_channel.packets.OpcodeCS;
 import com.mmobite.as.network.packet.WritePacket;
 
 public class SendGameSessionInfoPacket extends WritePacket {
@@ -38,6 +38,6 @@ public class SendGameSessionInfoPacket extends WritePacket {
 
     @Override
     public int getOpcode() {
-        return CS_Opcodes.gamesessioninfopacket;
+        return OpcodeCS.gamesessioninfopacket;
     }
 }

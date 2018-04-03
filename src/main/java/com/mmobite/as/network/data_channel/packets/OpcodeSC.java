@@ -1,6 +1,6 @@
 package com.mmobite.as.network.data_channel.packets;
 
-public class SC_Opcodes {
+public class OpcodeSC {
 
     /*
 	format: "c"

@@ -13,13 +13,13 @@ public class DataPacketsManager {
     protected final static Map<Integer, Class<? extends ReadPacket>> packets = new HashMap<>();
 
     static {
-        packets.put(SC_Opcodes.dummypacket, ReceiveDummyPacket.class);
-        packets.put(SC_Opcodes.pingpacket, ReceivePingPacket.class);
-        packets.put(SC_Opcodes.pongpacket, ReceivePongPacket.class);
-        packets.put(SC_Opcodes.stoptracepacket, ReceiveStopTracePpacket.class);
-        packets.put(SC_Opcodes.starttracepacket, ReceiveStartTracePacket.class);
-        packets.put(SC_Opcodes.stoptraceopcodepacket, ReceiveStopTraceOpcodePacket.class);
-        packets.put(SC_Opcodes.starttraceopcodepacket, ReceiveStartTraceOpcodePacket.class);
+        packets.put(OpcodeSC.dummypacket, ReceiveDummyPacket.class);
+        packets.put(OpcodeSC.pingpacket, ReceivePingPacket.class);
+        packets.put(OpcodeSC.pongpacket, ReceivePongPacket.class);
+        packets.put(OpcodeSC.stoptracepacket, ReceiveStopTracePpacket.class);
+        packets.put(OpcodeSC.starttracepacket, ReceiveStartTracePacket.class);
+        packets.put(OpcodeSC.stoptraceopcodepacket, ReceiveStopTraceOpcodePacket.class);
+        packets.put(OpcodeSC.starttraceopcodepacket, ReceiveStartTraceOpcodePacket.class);
     }
 
     public static ReadPacket getPacket(int opcode) {

@@ -1,7 +1,7 @@
 package com.mmobite.as.network.ctrl_channel.handlers;
 
 import com.mmobite.as.network.client.ITcpClient;
-import com.mmobite.as.network.ctrl_channel.packets.CS_Opcodes;
+import com.mmobite.as.network.ctrl_channel.packets.OpcodeCS;
 import com.mmobite.as.network.packet.ReadPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ public class ReceiveDummyPacket extends ReadPacket {
 
     @Override
     public int getOpcode() {
-        return CS_Opcodes.dummypacket;
+        return OpcodeCS.dummypacket;
     }
 
     @Override
