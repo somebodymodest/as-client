@@ -43,6 +43,7 @@ public class SendVersionPacket extends WritePacket {
         // s - sWorldGUID[DB_WORLD_GUID_SIZE]
         // s - sHwid[DB_HWID_SIZE]
         // d - player total online time
+        // d - player level
         writeH(DataPacketsManager.protocol_version);
         writeH(0);
         writeD((int) client_.getGameSessionHandle());
@@ -54,6 +55,7 @@ public class SendVersionPacket extends WritePacket {
         writeS(ClientProperties.WORLD_GUID);
         writes(client_.game_session_info_.hwid);
         writeD(client_.game_session_info_.online_time);
+        writeD(client_.game_session_info_.char_level);
         //log.debug("writeBody end");
     }
 

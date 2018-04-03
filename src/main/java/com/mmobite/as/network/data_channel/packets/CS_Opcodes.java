@@ -21,7 +21,8 @@ public class CS_Opcodes {
         d - nAccountId
         s - sWorldGUID[DB_WORLD_GUID_SIZE]
         s - sHwid[DB_HWID_SIZE]
-        d - player total online time
+        d - player total online time in seconds
+        d - player level
     */
     public static final int versionpacket = 0x01;
 
@@ -63,6 +64,7 @@ public class CS_Opcodes {
         d - nAccountId
 		s - hwid[DB_HWID_SIZE]
 		d - player total online time
+		d - player level
 	*/
     public static final int gamesessioninfopacket = 0x06;
 

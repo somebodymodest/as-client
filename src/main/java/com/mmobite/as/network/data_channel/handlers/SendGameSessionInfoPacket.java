@@ -24,7 +24,8 @@ public class SendGameSessionInfoPacket extends WritePacket {
             d - nCharDbId
             d - nAccountId
             S - hwid[DB_HWID_SIZE]
-            d - player total online time
+            d - player total online time in seconds
+            d - player level
         */
         writeS(client_.game_session_info_.account_name);
         writeS(client_.game_session_info_.character_name);
@@ -32,6 +33,7 @@ public class SendGameSessionInfoPacket extends WritePacket {
         writeD(client_.game_session_info_.account_dbid);
         writes(client_.game_session_info_.hwid);
         writeD(client_.game_session_info_.online_time);
+        writeD(client_.game_session_info_.char_level);
     }
 
     @Override
