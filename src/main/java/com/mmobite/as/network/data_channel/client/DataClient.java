@@ -4,7 +4,6 @@ import com.mmobite.as.api.AntispamAPI_Impl;
 import com.mmobite.as.api.model.Direction;
 import com.mmobite.as.api.model.GameSessionInfo;
 import com.mmobite.as.api.model.NetworkSessionInfo;
-import com.mmobite.as.api.model.PacketEx;
 import com.mmobite.as.network.client.ClientProperties;
 import com.mmobite.as.network.client.ITcpClient;
 import com.mmobite.as.network.data_channel.handlers.SendGameSessionInfoPacket;
@@ -19,7 +18,6 @@ import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
@@ -107,24 +105,31 @@ public class DataClient extends ITcpClient {
 
     public void sendPacketData(int direction, ByteBuffer buf) {
         final int size = buf.remaining();
-        final int offset = buf.position();
-        final byte[] data = new byte[size]; int pos = buf.position(); buf.get(data, 0, size); buf.position(pos);
-        sendPacketData(direction, data, 0, size);
+        final byte[] data = new byte[size];
+        int pos = buf.position();
+        buf.get(data, 0, size);
+        buf.position(pos);
+
+        sendPacketData(direction, data, size);
     }
 
-    public void sendPacketData(int direction, byte[] data, int offset, int size) {
-        if(offset + size > data.length)
+    public void sendPacketData(int direction, byte[] buf, int offset, int size) {
+        if(offset + size > buf.length)
             throw new InvalidParameterException();
 
-        final byte[] bytes = Arrays.copyOfRange(data, offset, offset + size);
+        final byte[] data = Arrays.copyOfRange(buf, offset, offset + size);
 
-        short nOpCode = (short) (bytes[0] & 0xff);
-        short nOpCodeEx = (nOpCode == get_opcode_ex(direction)) ? bytes[1] : 0;
+        sendPacketData(direction, data, size);
+    }
+
+    private void sendPacketData(int direction, byte[] data, int size) {
+        int nOpCode = (data[0] & 0xff);
+        int nOpCodeEx = (nOpCode == getOpcodeEx(direction)) ? (data[1] & 0xFFFF) : 0; //TODO: we need get short from bytes array
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
         //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
-        sendPacket(new SendPacketDataPacket(direction, bytes, size));
+        sendPacket(new SendPacketDataPacket(direction, data, size));
     }
 
     public void sendHwid(String hwid) {
@@ -226,7 +231,7 @@ public class DataClient extends ITcpClient {
         this.try_reconnect_ = onOff;
     }
 
-    static public byte get_opcode_ex(int direction) {
-        return (byte) (direction == gameclient.value ? gameclient_opcode_ex.value : clientgame_opcode_ex.value);
+    static public int getOpcodeEx(int direction) {
+        return (direction == gameclient.value ? gameclient_opcode_ex.value : clientgame_opcode_ex.value);
     }
 }

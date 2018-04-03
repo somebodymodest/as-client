@@ -43,7 +43,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = (ByteBuf) msg;
 
-        short opcode = (short) buf.readByte();
+        int opcode = (int) buf.readByte();
 
         ReadPacket pkt = DataPacketsManager.getPacket(opcode);
         pkt.setBuffer(buf);

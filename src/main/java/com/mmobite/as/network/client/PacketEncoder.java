@@ -19,7 +19,7 @@ public class PacketEncoder extends MessageToByteEncoder<WritePacket> {
         pkt.writeC((byte) pkt.getOpcode());
         pkt.writeBody();
 
-        short dataLength = (short) (pkt.getBuffer().readableBytes());
+        int dataLength = pkt.getBuffer().readableBytes();
         //log.debug("dataLength: {}", dataLength);
 
         out.writeShortLE(dataLength + 2);

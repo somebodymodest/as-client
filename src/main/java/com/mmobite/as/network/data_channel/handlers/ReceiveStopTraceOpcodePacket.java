@@ -24,7 +24,7 @@ public class ReceiveStopTraceOpcodePacket extends ReadPacket {
         nDirection = readC();
         nOpcode = readC();
 
-        if (nOpcode == DataClient.get_opcode_ex(nDirection))
+        if (nOpcode == DataClient.getOpcodeEx(nDirection))
             nOpcodeEx = readH();
         else
             nOpcodeEx = 0;

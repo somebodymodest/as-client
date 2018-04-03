@@ -25,7 +25,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         in.markReaderIndex();
 
         // Wait until the whole data is available.
-        short dataLength = (short) (in.readShortLE() - 2);
+        int dataLength = (in.readShortLE() - 2);
 
         //log.debug("dataLength = {}", dataLength);
 

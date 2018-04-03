@@ -27,12 +27,12 @@ public class AntispamAPI {
         AntispamAPI_Impl.sendGameSessionInfo(sessionId, info);
     }
 
-    public static final void sendPacketData(long sessionId, int direction, ByteBuffer pkt) {
-        AntispamAPI_Impl.sendPacketData(sessionId, direction, pkt);
+    public static final void sendPacketData(long sessionId, int direction, ByteBuffer buf) {
+        AntispamAPI_Impl.sendPacketData(sessionId, direction, buf);
     }
 
-    public static final void sendPacketData(long sessionId, int direction, byte[] data, int offset, int size) {
-        AntispamAPI_Impl.sendPacketData(sessionId, direction, data, offset, size);
+    public static final void sendPacketData(long sessionId, int direction, byte[] buf, int offset, int size) {
+        AntispamAPI_Impl.sendPacketData(sessionId, direction, buf, offset, size);
     }
 
     public static final void sendHwid(long sessionId, String hwid) {
