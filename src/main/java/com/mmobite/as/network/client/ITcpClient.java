@@ -32,8 +32,8 @@ public abstract class ITcpClient {
     private final ChannelFutureListener SendExceptionHandler = new ChannelFutureListener() {
         @Override
         public void operationComplete(ChannelFuture future) {
-            //log.info("operationComplete: {}", future.cause());
             if (!future.isSuccess()) {
+                log.info("Something wrong while sending packet to AntiSpam server:");
                 future.cause().printStackTrace();
             }
         }
