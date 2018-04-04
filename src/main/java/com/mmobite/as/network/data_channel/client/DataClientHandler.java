@@ -48,8 +48,12 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
         ReadPacket pkt = DataPacketsManager.getPacket(opcode);
         pkt.setBuffer(buf);
 
-        if (pkt.read())
-            pkt.run(getClient());
+        try {
+            if (pkt.read())
+                pkt.run(getClient());
+        } finally {
+            //buf.release(); wrong!!!
+        }
     }
 
     @Override

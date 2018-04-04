@@ -23,19 +23,18 @@ public abstract class ITcpClient {
         this.channelRef.set(channel);
     }
 
-    public void sendPacket(WritePacket pkt) {
+    public void sendPacket(final WritePacket pkt) {
         Channel ch = getChannel();
         if (ch != null)
-            ch.writeAndFlush(pkt).addListener(SendExceptionHandler);
+            ch.writeAndFlush(pkt).addListener(new ChannelFutureListener() {
+                @Override
+                public void operationComplete(ChannelFuture future) {
+                    if (!future.isSuccess()) {
+                        log.info("Something wrong while sending packet to AntiSpam server:");
+                        future.cause().printStackTrace();
+                    }
+                    pkt.getBuffer().release();
+                }
+            });
     }
-
-    private final ChannelFutureListener SendExceptionHandler = new ChannelFutureListener() {
-        @Override
-        public void operationComplete(ChannelFuture future) {
-            if (!future.isSuccess()) {
-                log.info("Something wrong while sending packet to AntiSpam server:");
-                future.cause().printStackTrace();
-            }
-        }
-    };
 }

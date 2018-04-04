@@ -35,7 +35,7 @@ public class CtrlClient extends ITcpClient{
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .remoteAddress(HOST_, PORT_)
-                .handler(new LoggingHandler(LogLevel.DEBUG))
+                .handler(new LoggingHandler(LogLevel.INFO))
                 .handler(new CtrlClientInitializer(handler_));
 
         handler_.setClient(this);

@@ -49,8 +49,12 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
         ReadPacket pkt = CtrlPacketsManager.getPacket(opcode);
         pkt.setBuffer(buf);
 
-        if (pkt.read())
-            pkt.run(getClient());
+        try {
+            if (pkt.read())
+                pkt.run(getClient());
+        } finally {
+            //buf.release(); wrong!!!
+        }
     }
 
     @Override
