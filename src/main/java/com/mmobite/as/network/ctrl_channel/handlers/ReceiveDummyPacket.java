@@ -25,7 +25,7 @@ public class ReceiveDummyPacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.error("Called ReceiveDummyPacket opcode=[{}]", getOpcode());
+        log.info("Called ReceiveDummyPacket opcode=[{}]", getOpcode());
     }
 
 }

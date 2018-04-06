@@ -48,7 +48,7 @@ public class CtrlClient extends ITcpClient{
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.cause() != null) {
-                    log.error("Failed to connect: " + future.cause());
+                    log.info("Failed to connect: " + future.cause());
                 }
             }
         });

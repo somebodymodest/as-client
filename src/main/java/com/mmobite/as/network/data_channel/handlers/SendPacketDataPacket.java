@@ -23,7 +23,7 @@ public class SendPacketDataPacket extends WritePacket {
     public void writeBody() {
         int pkt_opcode = data_[0] & 0xFF;
         int pkt_length = size_;
-        log.info("SendPacketDataPacket: writeBody start. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
+        //log.info("SendPacketDataPacket: writeBody start. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
         /*
         format: "cdddb"
             c - opcode
@@ -36,7 +36,7 @@ public class SendPacketDataPacket extends WritePacket {
         writeD((int) System.currentTimeMillis());
         writeD(size_);
         writeB(data_);
-        log.info("SendPacketDataPacket: writeBody end. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
+        //log.info("SendPacketDataPacket: writeBody end. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
     }
 
     @Override

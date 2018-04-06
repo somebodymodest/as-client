@@ -39,7 +39,7 @@ public class ClientProperties {
             RECONNECT_TIMEOUT = Integer.parseInt(prop.getProperty("RECONNECT_TIMEOUT", "5"));
             READ_TIMEOUT = Integer.parseInt(prop.getProperty("READ_TIMEOUT", "-1"));
         } catch (Exception ex) {
-            log.error("Load config exception: ", ex);
+            log.info("Load config exception: ", ex);
         }
     }
 

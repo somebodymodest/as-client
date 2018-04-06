@@ -65,14 +65,14 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
         IdleStateEvent e = (IdleStateEvent) evt;
         if (e.state() == IdleState.READER_IDLE) {
             // The connection was OK but there was no traffic for last period.
-            log.debug("Disconnecting due to no inbound traffic");
+            log.info("Disconnecting due to no inbound traffic");
             ctx.close();
         }
     }
 
     @Override
     public void channelInactive(final ChannelHandlerContext ctx) {
-        log.debug("Disconnected from: " + ctx.channel().remoteAddress());
+        log.info("Disconnected from: " + ctx.channel().remoteAddress());
         getClient().setChannel(null);
     }
 
@@ -84,7 +84,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
         ctx.channel().eventLoop().schedule(new Runnable() {
             @Override
             public void run() {
-                log.debug("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
+                log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
                 getClient().tryConnect();
             }
         }, ClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
