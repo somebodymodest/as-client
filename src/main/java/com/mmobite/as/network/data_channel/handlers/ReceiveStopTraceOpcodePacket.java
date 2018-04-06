@@ -34,7 +34,7 @@ public class ReceiveStopTraceOpcodePacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.info("ReceiveStopTraceOpcodePacket nDirection[{}] nOpcode[{}] nOpcodeEx[{}]", nDirection, nOpcode, nOpcodeEx);
+        //log.info("ReceiveStopTraceOpcodePacket nDirection[{}] nOpcode[{}] nOpcodeEx[{}]", nDirection, nOpcode, nOpcodeEx);
         DataClient c = (DataClient)client;
         c.traceOpcode(nDirection, nOpcode, nOpcodeEx, false);
     }

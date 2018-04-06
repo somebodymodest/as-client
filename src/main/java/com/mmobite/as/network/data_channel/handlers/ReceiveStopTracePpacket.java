@@ -24,7 +24,7 @@ public class ReceiveStopTracePpacket extends ReadPacket {
 
     @Override
     public void run(ITcpClient client) {
-        log.info("ReceiveStopTracePpacket");
+        //log.info("ReceiveStopTracePpacket");
         DataClient c = (DataClient)client;
         c.setBlocked(true);
     }
