@@ -4,6 +4,7 @@ import com.mmobite.as.network.packet.WritePacket;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.EventLoopGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,8 @@ public abstract class ITcpClient {
     private static Logger log = LoggerFactory.getLogger(ITcpClient.class.getName());
 
     private final AtomicReference<Channel> channelRef = new AtomicReference<>();
+
+    abstract public EventLoopGroup getLoop();
 
     public Channel getChannel() {
         return channelRef.get();

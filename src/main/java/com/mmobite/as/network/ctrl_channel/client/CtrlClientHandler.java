@@ -82,7 +82,7 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
     public void channelUnregistered(final ChannelHandlerContext ctx) throws Exception {
         log.info("Sleeping for: " + ClientProperties.RECONNECT_TIMEOUT + 's');
 
-        ctx.channel().eventLoop().schedule(new Runnable() {
+        getClient().getLoop().schedule(new Runnable() {
             @Override
             public void run() {
                 log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);

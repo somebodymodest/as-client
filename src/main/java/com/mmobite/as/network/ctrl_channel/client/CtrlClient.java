@@ -54,6 +54,10 @@ public class CtrlClient extends ITcpClient{
         });
     }
 
+    public EventLoopGroup getLoop() {
+        return loop_;
+    }
+
     public void setConnected(boolean onOff) {
         is_connected_.set(onOff);
     }

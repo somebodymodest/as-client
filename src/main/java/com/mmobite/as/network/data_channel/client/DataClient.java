@@ -74,6 +74,10 @@ public class DataClient extends ITcpClient {
         tryConnect();
     }
 
+    public EventLoopGroup getLoop() {
+        return loop_;
+    }
+
     public void tryConnect() {
 
         if (AntispamAPI_Impl.isConnectedToTraceServer()) {

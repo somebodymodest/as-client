@@ -81,7 +81,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
         if (!getClient().isTryReconnect())
             return;
 
-        ctx.channel().eventLoop().schedule(new Runnable() {
+        getClient().getLoop().schedule(new Runnable() {
             @Override
             public void run() {
                 log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
