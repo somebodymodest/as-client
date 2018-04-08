@@ -1,0 +1,1 @@
+java.exe -cp as-client.jar com.mmobite.as.Main 
