@@ -81,10 +81,10 @@ public class DataClient extends ITcpClient {
     public void tryConnect() {
 
         if (AntispamAPI_Impl.isConnectedToTraceServer()) {
-            log.info("Try to connect to: " + HOST_ + ':' + PORT_);
+            //log.info("Try to connect to: " + HOST_ + ':' + PORT_);
             bs_.connect();
         } else {
-            log.info("Try to connect to: wait for ctrl channel");
+            //log.info("Try to connect to: wait for ctrl channel");
             loop_.schedule(new Runnable() {
                 @Override
                 public void run() {

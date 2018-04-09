@@ -84,7 +84,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
         getClient().getLoop().schedule(new Runnable() {
             @Override
             public void run() {
-                log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
+                //log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
                 getClient().tryConnect();
             }
         }, ClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
@@ -92,7 +92,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        //cause.printStackTrace();
         ctx.close();
     }
 

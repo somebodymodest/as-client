@@ -28,16 +28,18 @@ public abstract class ITcpClient {
 
     public void sendPacket(final WritePacket pkt) {
         Channel ch = getChannel();
-        if (ch != null)
-            ch.writeAndFlush(pkt).addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) {
-                    if (!future.isSuccess()) {
-                        log.info("Something wrong while sending packet to AntiSpam server:");
-                        future.cause().printStackTrace();
-                    }
-                    pkt.getBuffer().release();
+        if (ch == null || !ch.isActive() || !ch.isWritable()) {
+            return;
+        }
+        ch.writeAndFlush(pkt).addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) {
+                if (!future.isSuccess()) {
+                    //log.info("Something wrong while sending packet to AntiSpam server:");
+                    future.cause().printStackTrace();
                 }
-            });
+                pkt.getBuffer().release();
+            }
+        });
     }
 }
