@@ -1,6 +1,6 @@
 package com.mmobite.as.network.ctrl_channel.client;
 
-import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.AntiSpamClientProperties;
 import com.mmobite.as.network.client.PacketDecoder;
 import com.mmobite.as.network.client.PacketEncoder;
 import io.netty.channel.ChannelInitializer;
@@ -20,8 +20,8 @@ public class CtrlClientInitializer extends ChannelInitializer<SocketChannel> {
     public void initChannel(SocketChannel ch) {
         ChannelPipeline pipeline = ch.pipeline();
 
-        if (ClientProperties.READ_TIMEOUT > 0) {
-            pipeline.addLast(new IdleStateHandler(ClientProperties.READ_TIMEOUT, 0, 0), handler_);
+        if (AntiSpamClientProperties.READ_TIMEOUT > 0) {
+            pipeline.addLast(new IdleStateHandler(AntiSpamClientProperties.READ_TIMEOUT, 0, 0), handler_);
         }
 
         // Add the number codec first,

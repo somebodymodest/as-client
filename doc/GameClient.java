@@ -8,7 +8,7 @@ import com.mmobite.as.api.AntispamAPI;
 import com.mmobite.as.api.model.Direction;
 import com.mmobite.as.api.model.GameSessionInfo;
 import com.mmobite.as.api.model.NetworkSessionInfo;
-import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.AntiSpamClientProperties;
 import org.mmocore.commons.net.nio.impl.MMOClient;
 import org.mmocore.commons.net.nio.impl.MMOConnection;
 import org.mmocore.gameserver.Config;
@@ -86,7 +86,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 		_state = GameClientState.CONNECTED;
 		_crypt = new GameCrypt();
 		_ip = con.getSocket().getInetAddress().getHostAddress();
-		if(ClientProperties.ENABLED) {
+		if(AntiSpamClientProperties.ENABLED) {
 			NetworkSessionInfo networkSessionInfo = new NetworkSessionInfo();
 			//networkSessionInfo.ipv4 = getIpAddr();
 			antispamSession = AntispamAPI.openGameSession(networkSessionInfo);
@@ -326,7 +326,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 
 		setActiveChar(selectedPlayer);
 		setState(GameClient.GameClientState.ENTER_GAME);
-		if(antispamSession > 0 && ClientProperties.ENABLED){
+		if(antispamSession > 0 && AntiSpamClientProperties.ENABLED){
 			GameSessionInfo gameSessionInfo = new GameSessionInfo();
 			gameSessionInfo.account_name = getLogin();
 			gameSessionInfo.character_name = selectedPlayer.getName();

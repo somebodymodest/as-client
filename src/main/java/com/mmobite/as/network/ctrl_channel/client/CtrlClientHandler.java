@@ -1,6 +1,6 @@
 package com.mmobite.as.network.ctrl_channel.client;
 
-import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.AntiSpamClientProperties;
 import com.mmobite.as.network.ctrl_channel.handlers.SendVersionPacket;
 import com.mmobite.as.network.ctrl_channel.packets.CtrlPacketsManager;
 import com.mmobite.as.network.packet.ReadPacket;
@@ -80,7 +80,7 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void channelUnregistered(final ChannelHandlerContext ctx) throws Exception {
-        log.info("Sleeping for: " + ClientProperties.RECONNECT_TIMEOUT + 's');
+        log.info("Sleeping for: " + AntiSpamClientProperties.RECONNECT_TIMEOUT + 's');
 
         getClient().getLoop().schedule(new Runnable() {
             @Override
@@ -88,7 +88,7 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
                 log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
                 getClient().connect();
             }
-        }, ClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
+        }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
     }
 
     @Override

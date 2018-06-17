@@ -1,6 +1,6 @@
 package com.mmobite.as.network.ctrl_channel.handlers;
 
-import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.AntiSpamClientProperties;
 import com.mmobite.as.network.ctrl_channel.client.CtrlClient;
 import com.mmobite.as.network.ctrl_channel.packets.OpcodeCS;
 import com.mmobite.as.network.ctrl_channel.packets.CtrlPacketsManager;
@@ -39,6 +39,6 @@ public class SendVersionPacket extends WritePacket {
         writeS("license test");
         writeS("email test");
         writeD(1);
-        writeS(ClientProperties.WORLD_GUID);
+        writeS(AntiSpamClientProperties.WORLD_GUID);
     }
 }

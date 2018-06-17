@@ -4,7 +4,7 @@ import com.mmobite.as.api.AntispamAPI_Impl;
 import com.mmobite.as.api.model.Direction;
 import com.mmobite.as.api.model.GameSessionInfo;
 import com.mmobite.as.api.model.NetworkSessionInfo;
-import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.AntiSpamClientProperties;
 import com.mmobite.as.network.client.ITcpClient;
 import com.mmobite.as.network.data_channel.handlers.SendGameSessionInfoPacket;
 import com.mmobite.as.network.data_channel.handlers.SendHwidPacket;
@@ -54,8 +54,8 @@ public class DataClient extends ITcpClient {
     boolean[] m_aTracedOpcodeEx_SC = new boolean[0xFF];
 
     public DataClient(NetworkSessionInfo info) {
-        HOST_ = ClientProperties.SERVER_ADDR;
-        PORT_ = ClientProperties.PORT_DATA;
+        HOST_ = AntiSpamClientProperties.SERVER_ADDR;
+        PORT_ = AntiSpamClientProperties.PORT_DATA;
         L2ProtocolVersion_ = 0;
         network_session_info_ = info;
         game_session_info_ = new GameSessionInfo();
@@ -90,7 +90,7 @@ public class DataClient extends ITcpClient {
                 public void run() {
                     tryConnect();
                 }
-            }, ClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
+            }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
         }
     }
 

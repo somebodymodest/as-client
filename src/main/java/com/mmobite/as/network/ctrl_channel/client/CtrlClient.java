@@ -1,6 +1,6 @@
 package com.mmobite.as.network.ctrl_channel.client;
 
-import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.AntiSpamClientProperties;
 import com.mmobite.as.network.client.ITcpClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -26,8 +26,8 @@ public class CtrlClient extends ITcpClient{
     private final AtomicBoolean is_connected_ = new AtomicBoolean(false);
 
     public CtrlClient(int L2ProtocolVersion) {
-        HOST_ = ClientProperties.SERVER_ADDR;
-        PORT_ = ClientProperties.PORT_CTRL;
+        HOST_ = AntiSpamClientProperties.SERVER_ADDR;
+        PORT_ = AntiSpamClientProperties.PORT_CTRL;
         L2ProtocolVersion_ = L2ProtocolVersion;
 
         bs_ = new Bootstrap();

@@ -7,10 +7,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClientProperties {
-
-    private static Logger log = LoggerFactory.getLogger(ClientProperties.class.getName());
-    private final static String filename = "antispam/client.properties";
+public class AntiSpamClientProperties {
+    private static Logger log = LoggerFactory.getLogger(AntiSpamClientProperties.class.getName());
 
     public static boolean ENABLED;
     public static String WORLD_GUID;
@@ -20,14 +18,10 @@ public class ClientProperties {
     public static int RECONNECT_TIMEOUT;
     public static int READ_TIMEOUT;
 
-    static {
-        load();
-    }
-
-    private static void load() {
+    public static void load(String configPath) {
         try {
             Properties prop = new Properties();
-            InputStream stream = new FileInputStream(filename);
+            InputStream stream = new FileInputStream(configPath);
             prop.load(stream);
             stream.close();
 
@@ -42,5 +36,4 @@ public class ClientProperties {
             log.info("Load config exception: ", ex);
         }
     }
-
 }

@@ -1,6 +1,6 @@
 package com.mmobite.as.network.data_channel.client;
 
-import com.mmobite.as.network.client.ClientProperties;
+import com.mmobite.as.network.client.AntiSpamClientProperties;
 import com.mmobite.as.network.data_channel.handlers.SendVersionPacket;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
 import com.mmobite.as.network.data_channel.handlers.ReceiveDummyPacket;
@@ -87,7 +87,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
                 //log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
                 getClient().tryConnect();
             }
-        }, ClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
+        }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
     }
 
     @Override
