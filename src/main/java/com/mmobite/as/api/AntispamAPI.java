@@ -29,8 +29,9 @@ public class AntispamAPI {
     }
 
     public static final void closeGameSession(long sessionId) {
-        if (!AntiSpamClientProperties.ENABLED)
-            return;
+        // !!! opened connections must be closed anyway
+        //if (!AntiSpamClientProperties.ENABLED)
+        //    return;
         AntispamAPI_Impl.closeGameSession(sessionId);
     }
 
