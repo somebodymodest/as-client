@@ -7,7 +7,6 @@ import com.mmobite.as.network.client.ITcpClient;
  *
  */
 public interface IReadPacket extends INetPacket {
-
     boolean read();
     void run(ITcpClient client);
 }

@@ -5,7 +5,6 @@ package com.mmobite.as.network.packet;
  *
  */
 public interface IWritePacket extends INetPacket {
-
     /**
      * add payload to buffer
      */
