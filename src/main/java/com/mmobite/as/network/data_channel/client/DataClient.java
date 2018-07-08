@@ -134,13 +134,13 @@ public class DataClient extends ITcpClient {
         nOpCode = buf.getChar() & 0xFF;
         if (nOpCode == getOpcodeEx(direction))
             nOpCodeEx = buf.getShort() & 0xFFFF;
+        buf.position(pos);
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
         //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
 
         // copy data to byte array
-        buf.position(pos);
         final int size = buf.remaining();
         final byte[] data = new byte[size];
         buf.get(data, 0, size);
