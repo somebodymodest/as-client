@@ -5,9 +5,6 @@ import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.OpcodeCS;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
 import com.mmobite.as.network.packet.WritePacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -15,7 +12,6 @@ import java.nio.ByteOrder;
 
 public class SendVersionPacket extends WritePacket {
 
-    private static Logger log = LoggerFactory.getLogger(SendVersionPacket.class.getName());
     private DataClient client_;
 
     public SendVersionPacket(DataClient client) {
@@ -30,7 +26,6 @@ public class SendVersionPacket extends WritePacket {
 
     @Override
     public void writeBody() {
-        //log.debug("writeBody start");
         // c - opcode
         // h - nTraceProtocolId
         // h - nWorldId !!! world_id should be equal 0
@@ -56,7 +51,6 @@ public class SendVersionPacket extends WritePacket {
         writes(client_.game_session_info_.hwid);
         writeD(client_.game_session_info_.online_time);
         writeD(client_.game_session_info_.char_level);
-        //log.debug("writeBody end");
     }
 
     int string_to_in_addr(String ipv4)

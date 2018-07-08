@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 
 public class ReceivePongPacket extends ReadPacket {
 
-    private static Logger log = LoggerFactory.getLogger(ReceivePongPacket.class.getName());
-
     @Override
     public int getOpcode() {
         return OpcodeSC.pongpacket;
@@ -17,13 +15,10 @@ public class ReceivePongPacket extends ReadPacket {
 
     @Override
     public boolean read() {
-        // nothing to read
         return true;
     }
 
     @Override
     public void run(ITcpClient client) {
-        //log.debug("Receive pong");
-        // do nothing
     }
 }

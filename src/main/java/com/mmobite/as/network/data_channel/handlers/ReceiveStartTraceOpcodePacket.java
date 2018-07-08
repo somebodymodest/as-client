@@ -4,15 +4,12 @@ import com.mmobite.as.network.client.ITcpClient;
 import com.mmobite.as.network.data_channel.client.DataClient;
 import com.mmobite.as.network.data_channel.packets.OpcodeSC;
 import com.mmobite.as.network.packet.ReadPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ReceiveStartTraceOpcodePacket extends ReadPacket {
 
-    private static Logger log = LoggerFactory.getLogger(ReceiveStartTraceOpcodePacket.class.getName());
-    private byte nDirection;
-    private int nOpcode;
-    private int nOpcodeEx;
+    private byte direction_;
+    private int opcode_;
+    private int opcode_ex_;
 
     @Override
     public int getOpcode() {
@@ -21,21 +18,21 @@ public class ReceiveStartTraceOpcodePacket extends ReadPacket {
 
     @Override
     public boolean read() {
-        nDirection = readC();
-        nOpcode = readC() & 0xFF;
+        direction_ = readC();
+        opcode_ = readC() & 0xFF;
 
-        if (nOpcode == DataClient.getOpcodeEx(nDirection))
-            nOpcodeEx = readH() & 0xFFFF;
+        if (opcode_ == DataClient.getOpcodeEx(direction_))
+            opcode_ex_ = readH() & 0xFFFF;
         else
-            nOpcodeEx = 0;
+            opcode_ex_ = 0;
 
         return true;
     }
 
     @Override
     public void run(ITcpClient client) {
-        //log.info("ReceiveStartTraceOpcodePacket nDirection[{}] nOpcode[{}] nOpcodeEx[{}]", nDirection, nOpcode, nOpcodeEx);
+        //log.debug("ReceiveStartTraceOpcodePacket direction_[{}] opcode_[{}] opcode_ex_[{}]", direction_, opcode_, opcode_ex_);
         DataClient c = (DataClient)client;
-        c.traceOpcode(nDirection, nOpcode, nOpcodeEx, true);
+        c.traceOpcode(direction_, opcode_, opcode_ex_, true);
     }
 }

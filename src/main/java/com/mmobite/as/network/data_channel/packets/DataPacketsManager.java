@@ -2,7 +2,6 @@ package com.mmobite.as.network.data_channel.packets;
 
 import com.mmobite.as.network.data_channel.handlers.*;
 import com.mmobite.as.network.packet.ReadPacket;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ public class DataPacketsManager {
     protected final static Map<Integer, Class<? extends ReadPacket>> packets = new HashMap<>();
 
     static {
-        packets.put(OpcodeSC.dummypacket, ReceiveDummyPacket.class);
         packets.put(OpcodeSC.pingpacket, ReceivePingPacket.class);
         packets.put(OpcodeSC.pongpacket, ReceivePongPacket.class);
         packets.put(OpcodeSC.stoptracepacket, ReceiveStopTracePpacket.class);

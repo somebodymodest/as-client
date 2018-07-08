@@ -18,6 +18,11 @@ public abstract class ReadPacket implements IReadPacket {
         buf_ = buf;
     }
 
+    public void releaseBuffer() {
+        if (buf_ != null)
+            buf_.release();
+    }
+
     public void setBuffer(byte[] bytes) {
         buf_.readBytes(bytes);
     }

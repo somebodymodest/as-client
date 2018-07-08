@@ -10,31 +10,30 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CtrlClient extends ITcpClient{
 
-    private static Logger log = LoggerFactory.getLogger(CtrlClient.class.getName());
-
+    private final static Logger log = LoggerFactory.getLogger(CtrlClient.class.getName());
     private final static EventLoopGroup loop_ = new NioEventLoopGroup();
-    private final static CtrlClientHandler handler_ = new CtrlClientHandler();
+
+    private final CtrlClientHandler handler_ = new CtrlClientHandler();
     private final Bootstrap bs_;
-    public final String HOST_;
-    public final int PORT_;
+    public final String host_;
+    public final int port_;
     public final int L2ProtocolVersion_;
     private final AtomicBoolean is_connected_ = new AtomicBoolean(false);
 
     public CtrlClient(int L2ProtocolVersion) {
-        HOST_ = AntiSpamClientProperties.SERVER_ADDR;
-        PORT_ = AntiSpamClientProperties.PORT_CTRL;
+        host_ = AntiSpamClientProperties.SERVER_ADDR;
+        port_ = AntiSpamClientProperties.PORT_CTRL;
         L2ProtocolVersion_ = L2ProtocolVersion;
 
         bs_ = new Bootstrap();
         bs_.group(loop_)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
-                .remoteAddress(HOST_, PORT_)
+                .remoteAddress(host_, port_)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .handler(new CtrlClientInitializer(handler_));
 
@@ -48,7 +47,7 @@ public class CtrlClient extends ITcpClient{
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.cause() != null) {
-                    log.info("Failed to connect: " + future.cause());
+                    log.error("Failed to connect: " + future.cause());
                 }
             }
         });

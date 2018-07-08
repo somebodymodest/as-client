@@ -12,12 +12,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AntispamAPI_Impl {
 
+    //private final static Logger log = LoggerFactory.getLogger(AntispamAPI_Impl.class.getName());
+
     private static final Map<Long, DataClient> clientMap = new ConcurrentHashMap<>(3000);
     private static final AtomicBoolean is_initialized = new AtomicBoolean(false);
-    private static CtrlClient client = null;
+    private static CtrlClient ctrl_client = null;
 
     public static boolean isConnectedToTraceServer() {
-        return client != null ? client.isConnected() : false;
+        return (ctrl_client != null) ? ctrl_client.isConnected() : false;
     }
 
     public static DataClient getClient(long sessionId) {
@@ -40,7 +42,7 @@ public class AntispamAPI_Impl {
      */
     public static final boolean init(int L2ProtocolVersion) {
         if (is_initialized.compareAndSet(false, true))
-            client = new CtrlClient(L2ProtocolVersion);
+            ctrl_client = new CtrlClient(L2ProtocolVersion);
         return true;
     }
 
@@ -48,6 +50,7 @@ public class AntispamAPI_Impl {
         DataClient client = new DataClient(info);
         long game_session_handle = client.getGameSessionHandle();
         addClient(game_session_handle, client);
+        //log.debug("openGameSession[{}]", game_session_handle);
         return game_session_handle;
     }
 

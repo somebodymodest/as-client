@@ -3,12 +3,11 @@ package com.mmobite.as.network.data_channel.client;
 import com.mmobite.as.network.client.AntiSpamClientProperties;
 import com.mmobite.as.network.data_channel.handlers.SendVersionPacket;
 import com.mmobite.as.network.data_channel.packets.DataPacketsManager;
-import com.mmobite.as.network.data_channel.handlers.ReceiveDummyPacket;
 import com.mmobite.as.network.packet.ReadPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 @ChannelHandler.Sharable
-public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
+public class DataClientHandler extends ChannelInboundHandlerAdapter {
 
     private static Logger log = LoggerFactory.getLogger(DataClientHandler.class.getName());
 
@@ -40,7 +39,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf buf = (ByteBuf) msg;
 
         int opcode = (int) buf.readUnsignedByte();
@@ -51,9 +50,10 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
         try {
             if (pkt.read())
                 pkt.run(getClient());
-        } finally {
-            //buf.release(); wrong!!!
+        } catch (Exception e){
         }
+
+        pkt.releaseBuffer();
     }
 
     @Override
@@ -66,6 +66,7 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
         if (e.state() == IdleState.READER_IDLE) {
             // The connection was OK but there was no traffic for last period.
             log.info("Disconnecting due to no inbound traffic");
+            getClient().tryReconnect(false);
             ctx.close();
         }
     }
@@ -77,15 +78,15 @@ public class DataClientHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     @Override
-    public void channelUnregistered(final ChannelHandlerContext ctx) throws Exception {
-        if (!getClient().isTryReconnect())
+    public void channelUnregistered(final ChannelHandlerContext ctx) {
+        if (!getClient().tryReconnect())
             return;
 
         getClient().getLoop().schedule(new Runnable() {
             @Override
             public void run() {
-                //log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
-                getClient().tryConnect();
+                //log.info("Reconnecting to: " + getClient().host_ + ':' + getClient().port_);
+                getClient().connect();
             }
         }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
     }

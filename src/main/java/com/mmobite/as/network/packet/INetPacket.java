@@ -10,4 +10,5 @@ public interface INetPacket {
     int getOpcode();
     ByteBuf getBuffer();
     void setBuffer(ByteBuf buf);
+    void releaseBuffer();
 }

@@ -2,12 +2,9 @@ package com.mmobite.as.network.data_channel.handlers;
 
 import com.mmobite.as.network.data_channel.packets.OpcodeCS;
 import com.mmobite.as.network.packet.WritePacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SendPacketDataPacket extends WritePacket {
 
-    private static Logger log = LoggerFactory.getLogger(SendVersionPacket.class.getName());
     private int direction_;
     private byte[] data_;
     private int size_;
@@ -21,9 +18,9 @@ public class SendPacketDataPacket extends WritePacket {
 
     @Override
     public void writeBody() {
-        int pkt_opcode = data_[0] & 0xFF;
-        int pkt_length = size_;
-        //log.info("SendPacketDataPacket: writeBody start. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
+        //int pkt_opcode = data_[0] & 0xFF;
+        //int pkt_length = size_;
+        //log.debug("SendPacketDataPacket: writeBody start. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
         /*
         format: "cdddb"
             c - opcode
@@ -36,7 +33,7 @@ public class SendPacketDataPacket extends WritePacket {
         writeD((int) System.currentTimeMillis());
         writeD(size_);
         writeB(data_);
-        //log.info("SendPacketDataPacket: writeBody end. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
+        //log.debug("SendPacketDataPacket: writeBody end. direction[{}] opcode[{}] size[{}]", direction_, pkt_opcode, pkt_length );
     }
 
     @Override

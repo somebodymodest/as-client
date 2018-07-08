@@ -9,6 +9,10 @@ public class SendPongPacket extends WritePacket {
 
     private static Logger log = LoggerFactory.getLogger(SendPongPacket.class.getName());
 
+    public SendPongPacket() {
+        super();
+    }
+
     @Override
     public int getOpcode() {
         return OpcodeCS.pongpacket;
@@ -16,6 +20,5 @@ public class SendPongPacket extends WritePacket {
 
     @Override
     public void writeBody() {
-        //log.debug("SendPongPacket");
     }
 }

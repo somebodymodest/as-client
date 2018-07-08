@@ -21,7 +21,7 @@ public class DataClientInitializer extends ChannelInitializer<SocketChannel> {
         ChannelPipeline pipeline = ch.pipeline();
 
         if (AntiSpamClientProperties.READ_TIMEOUT > 0) {
-            pipeline.addLast(new IdleStateHandler(AntiSpamClientProperties.READ_TIMEOUT, 0, 0), handler_);
+            pipeline.addLast(new IdleStateHandler(0, 0, AntiSpamClientProperties.READ_TIMEOUT), handler_);
         }
 
         // Add the number codec first,

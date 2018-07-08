@@ -13,7 +13,6 @@ public class CtrlPacketsManager {
     protected final static Map<Integer, Class<? extends ReadPacket>> packets = new HashMap<>();
 
     static {
-        packets.put(OpcodeSC.dummypacket, ReceiveDummyPacket.class);
         packets.put(OpcodeSC.pingpacket, ReceivePingPacket.class);
         packets.put(OpcodeSC.pongpacket, ReceivePongPacket.class);
     }

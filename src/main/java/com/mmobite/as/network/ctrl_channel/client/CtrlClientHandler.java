@@ -7,16 +7,15 @@ import com.mmobite.as.network.packet.ReadPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.concurrent.TimeUnit;
 
 @ChannelHandler.Sharable
-public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
+public class CtrlClientHandler extends ChannelInboundHandlerAdapter {
 
     private static Logger log = LoggerFactory.getLogger(CtrlClientHandler.class.getName());
 
@@ -40,11 +39,10 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf buf = (ByteBuf) msg;
 
-        int opcode = (int) buf.readByte();
-        //log.info("Got packet opcode[{}]", opcode);
+        int opcode = (int) buf.readUnsignedByte();
 
         ReadPacket pkt = CtrlPacketsManager.getPacket(opcode);
         pkt.setBuffer(buf);
@@ -52,9 +50,10 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
         try {
             if (pkt.read())
                 pkt.run(getClient());
-        } finally {
-            //buf.release(); wrong!!!
+        } catch (Exception e){
         }
+
+        pkt.releaseBuffer();
     }
 
     @Override
@@ -79,13 +78,13 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     @Override
-    public void channelUnregistered(final ChannelHandlerContext ctx) throws Exception {
+    public void channelUnregistered(final ChannelHandlerContext ctx) {
         log.info("Sleeping for: " + AntiSpamClientProperties.RECONNECT_TIMEOUT + 's');
 
         getClient().getLoop().schedule(new Runnable() {
             @Override
             public void run() {
-                log.info("Reconnecting to: " + getClient().HOST_ + ':' + getClient().PORT_);
+                log.info("Reconnecting to: " + getClient().host_ + ':' + getClient().port_);
                 getClient().connect();
             }
         }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
@@ -96,5 +95,4 @@ public class CtrlClientHandler extends SimpleChannelInboundHandler<Object> {
         cause.printStackTrace();
         ctx.close();
     }
-
 }

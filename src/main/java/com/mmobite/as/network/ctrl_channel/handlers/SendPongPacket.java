@@ -5,6 +5,10 @@ import com.mmobite.as.network.packet.WritePacket;
 
 public class SendPongPacket extends WritePacket {
 
+    public SendPongPacket() {
+        super();
+    }
+
     @Override
     public int getOpcode() {
         return OpcodeCS.pongpacket;

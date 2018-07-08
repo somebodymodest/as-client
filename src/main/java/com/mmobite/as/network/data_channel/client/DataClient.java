@@ -31,15 +31,15 @@ import static com.mmobite.as.api.model.PacketEx.gameclient_opcode_ex;
 public class DataClient extends ITcpClient {
 
     // static
-    private static Logger log = LoggerFactory.getLogger(DataClient.class.getName());
+    private final static Logger log = LoggerFactory.getLogger(DataClient.class.getName());
     private final static EventLoopGroup loop_ = new NioEventLoopGroup();
-    private final static DataClientHandler handler_ = new DataClientHandler();
     private final static AtomicLong game_session_counter_ = new AtomicLong(0);
 
     // network
+    private final DataClientHandler handler_ = new DataClientHandler();
     private final Bootstrap bs_;
-    public final String HOST_;
-    public final int PORT_;
+    public final String host_;
+    public final int port_;
     public final int L2ProtocolVersion_;
     public NetworkSessionInfo network_session_info_;
     public GameSessionInfo game_session_info_;
@@ -54,8 +54,8 @@ public class DataClient extends ITcpClient {
     boolean[] m_aTracedOpcodeEx_SC = new boolean[0xFF];
 
     public DataClient(NetworkSessionInfo info) {
-        HOST_ = AntiSpamClientProperties.SERVER_ADDR;
-        PORT_ = AntiSpamClientProperties.PORT_DATA;
+        host_ = AntiSpamClientProperties.SERVER_ADDR;
+        port_ = AntiSpamClientProperties.PORT_DATA;
         L2ProtocolVersion_ = 0;
         network_session_info_ = info;
         game_session_info_ = new GameSessionInfo();
@@ -64,38 +64,57 @@ public class DataClient extends ITcpClient {
         bs_.group(loop_)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
-                .remoteAddress(HOST_, PORT_)
+                .remoteAddress(host_, port_)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .handler(new DataClientInitializer(handler_));
 
         handler_.setClient(this);
         game_session_handle_ = game_session_counter_.incrementAndGet();
 
-        tryConnect();
+        connect();
     }
 
     public EventLoopGroup getLoop() {
         return loop_;
     }
 
-    public void tryConnect() {
+    public boolean isBlocked() {
+        return is_blocked_;
+    }
 
+    public void setBlocked(boolean onOff) {
+        is_blocked_ = onOff;
+    }
+
+    public long getGameSessionHandle() {
+        return game_session_handle_;
+    }
+
+    public boolean tryReconnect() {
+        return try_reconnect_;
+    }
+
+    public void tryReconnect(boolean onOff) {
+        this.try_reconnect_ = onOff;
+    }
+
+    public void connect() {
         if (AntispamAPI_Impl.isConnectedToTraceServer()) {
-            //log.info("Try to connect to: " + HOST_ + ':' + PORT_);
+            //log.info("Try to connect to: " + host_ + ':' + port_);
             bs_.connect();
         } else {
             //log.info("Try to connect to: wait for ctrl channel");
             loop_.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    tryConnect();
+                    connect();
                 }
             }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
         }
     }
 
     public void closeSession() {
-        setTryReconnect(false);
+        tryReconnect(false);
 
         Channel ch = getChannel();
         if (ch != null)
@@ -108,9 +127,22 @@ public class DataClient extends ITcpClient {
     }
 
     public void sendPacketData(int direction, ByteBuffer buf) {
+        // extract and check packet opcodes
+        int pos = buf.position();
+        int nOpCode = 0;
+        int nOpCodeEx = 0;
+        nOpCode = buf.getChar() & 0xFF;
+        if (nOpCode == getOpcodeEx(direction))
+            nOpCodeEx = buf.getShort() & 0xFFFF;
+        if (isBlocked(direction, nOpCode, nOpCodeEx))
+            return;
+
+        //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
+
+        // copy data to byte array
+        buf.position(pos);
         final int size = buf.remaining();
         final byte[] data = new byte[size];
-        int pos = buf.position();
         buf.get(data, 0, size);
         buf.position(pos);
 
@@ -119,7 +151,23 @@ public class DataClient extends ITcpClient {
 
     public void sendPacketData(int direction, byte[] buf, int offset, int size) {
         if(offset + size > buf.length)
-            throw new InvalidParameterException();
+            return;
+
+        // extract and check packet opcodes
+        int nOpCode = 0;
+        int nOpCodeEx = 0;
+        try {
+            nOpCode = buf[offset + 0] & 0xFF;
+            if (nOpCode == getOpcodeEx(direction))
+                nOpCodeEx = ((buf[offset + 1] & 0xFF) << 0) + ((buf[offset + 2] & 0xFF) << 8);
+        } catch (Exception e) {
+            // cannot extract opcodes
+            return;
+        }
+        if (isBlocked(direction, nOpCode, nOpCodeEx))
+            return;
+
+        //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
 
         final byte[] data = Arrays.copyOfRange(buf, offset, offset + size);
 
@@ -127,25 +175,11 @@ public class DataClient extends ITcpClient {
     }
 
     private void sendPacketData(int direction, byte[] data, int size) {
-        int nOpCode = (data[0] & 0xff);
-        int nOpCodeEx = (nOpCode == getOpcodeEx(direction)) ? (data[1] & 0xFFFF) : 0; //TODO: we need get short from bytes array
-        if (isBlocked(direction, nOpCode, nOpCodeEx))
-            return;
-
-        //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
         sendPacket(new SendPacketDataPacket(direction, data, size));
     }
 
     public void sendHwid(String hwid) {
         sendPacket(new SendHwidPacket(hwid));
-    }
-
-    public boolean isBlocked() {
-        return is_blocked_;
-    }
-
-    public void setBlocked(boolean onOff) {
-        is_blocked_ = onOff;
     }
 
     public boolean isBlocked(int direction, int nOpCode, int nOpCodeEx) {
@@ -223,19 +257,7 @@ public class DataClient extends ITcpClient {
         return false;
     }
 
-    public long getGameSessionHandle() {
-        return game_session_handle_;
-    }
-
-    public boolean isTryReconnect() {
-        return try_reconnect_;
-    }
-
-    public void setTryReconnect(boolean onOff) {
-        this.try_reconnect_ = onOff;
-    }
-
     static public int getOpcodeEx(int direction) {
-        return (direction == gameclient.value ? gameclient_opcode_ex.value : clientgame_opcode_ex.value);
+        return (direction == gameclient.value) ? gameclient_opcode_ex.value : clientgame_opcode_ex.value;
     }
 }
