@@ -79,12 +79,12 @@ public class CtrlClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelUnregistered(final ChannelHandlerContext ctx) {
-        log.info("Sleeping for: " + AntiSpamClientProperties.RECONNECT_TIMEOUT + 's');
+        //log.info("Sleeping for: " + AntiSpamClientProperties.RECONNECT_TIMEOUT + 's');
 
         getClient().getLoop().schedule(new Runnable() {
             @Override
             public void run() {
-                log.info("Reconnecting to: " + getClient().host_ + ':' + getClient().port_);
+                //log.info("Reconnecting to: " + getClient().host_ + ':' + getClient().port_);
                 getClient().connect();
             }
         }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);

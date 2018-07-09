@@ -10,6 +10,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CtrlClient extends ITcpClient{
@@ -39,18 +40,22 @@ public class CtrlClient extends ITcpClient{
 
         handler_.setClient(this);
 
-        bs_.connect();
+        connect();
     }
 
     void connect() {
-        bs_.connect().addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture future) throws Exception {
-                if (future.cause() != null) {
-                    log.error("Failed to connect: " + future.cause());
+        if (AntiSpamClientProperties.ENABLED) {
+            //log.info("Try to connect to: " + host_ + ':' + port_);
+            bs_.connect();
+        } else {
+            //log.info("Try to connect to: wait for timeout");
+            loop_.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    connect();
                 }
-            }
-        });
+            }, AntiSpamClientProperties.RECONNECT_TIMEOUT, TimeUnit.SECONDS);
+        }
     }
 
     public EventLoopGroup getLoop() {
