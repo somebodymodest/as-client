@@ -128,19 +128,22 @@ public class DataClient extends ITcpClient {
 
     public void sendPacketData(int direction, ByteBuffer buf) {
         // extract and check packet opcodes
-        int pos = buf.position();
-        int nOpCode = 0;
+        if (buf.remaining() < 1)
+            return;
+        int nOpCode = buf.getChar(0) & 0xFF;
         int nOpCodeEx = 0;
-        nOpCode = buf.getChar() & 0xFF;
-        if (nOpCode == getOpcodeEx(direction))
-            nOpCodeEx = buf.getShort() & 0xFFFF;
-        buf.position(pos);
+        if (nOpCode == getOpcodeEx(direction)) {
+            if (buf.remaining() < 3)
+                return;
+            nOpCodeEx = buf.getShort(1) & 0xFFFF;
+        }
         if (isBlocked(direction, nOpCode, nOpCodeEx))
             return;
 
         //log.info("sendPacketData: direction[{}] OpCode[{}:{}] Size[{}]", direction, nOpCode, nOpCodeEx, size);
 
         // copy data to byte array
+        int pos = buf.position();
         final int size = buf.remaining();
         final byte[] data = new byte[size];
         buf.get(data, 0, size);
