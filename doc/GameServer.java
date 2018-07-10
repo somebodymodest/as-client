@@ -319,8 +319,10 @@ public class GameServer
 		}
 
 		_log.info("GameServer started.");
-		boolean antispam = AntispamAPI.init(273);
+
+		boolean antispam = AntispamAPI.init("antispam/client.properties", 273);
 		_log.info("AntiSpam state {}", antispam);
+
 		AuthServerCommunication.getInstance().start();
 
 		if(Config.IS_TELNET_ENABLED)

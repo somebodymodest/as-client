@@ -41,7 +41,6 @@ import org.slf4j.LoggerFactory;
 public class GameClient extends MMOClient<MMOConnection<GameClient>>
 {
 	private static final Logger _log = LoggerFactory.getLogger(GameClient.class);
-	private long antispamSession;
 
 	public static enum GameClientState
 	{
@@ -79,6 +78,16 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 
 	private Player _activeChar;
 
+	private long antispamSession;
+
+	public void setAntispamSession(long id) {
+		antispamSession = id;
+	}
+
+	public long getAntispamSession() {
+		return antispamSession;
+	}
+
 	protected GameClient(MMOConnection<GameClient> con)
 	{
 		super(con);
@@ -86,17 +95,8 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 		_state = GameClientState.CONNECTED;
 		_crypt = new GameCrypt();
 		_ip = con.getSocket().getInetAddress().getHostAddress();
-		if(AntiSpamClientProperties.ENABLED) {
-			NetworkSessionInfo networkSessionInfo = new NetworkSessionInfo();
-			//networkSessionInfo.ipv4 = getIpAddr();
-			antispamSession = AntispamAPI.openGameSession(networkSessionInfo);
-		}
+		setAntispamSession(AntispamAPI.openGameSession(new NetworkSessionInfo()));
 	}
-
-	public long getAntispamSession() {
-		return antispamSession;
-	}
-
 
 	private void notifyChangeState(GameClientState state){
 
@@ -118,8 +118,9 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 			player.setNetConnection(null);
 			player.scheduleDelete();
 		}
-		if(antispamSession > 0)
-			AntispamAPI.closeGameSession(antispamSession);
+		
+		AntispamAPI.closeGameSession(getAntispamSession());
+
 		if(getSessionKey() != null)
 		{
 			if(isAuthed())
@@ -326,24 +327,25 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 
 		setActiveChar(selectedPlayer);
 		setState(GameClient.GameClientState.ENTER_GAME);
-		if(antispamSession > 0 && AntiSpamClientProperties.ENABLED){
-			GameSessionInfo gameSessionInfo = new GameSessionInfo();
-			gameSessionInfo.account_name = getLogin();
-			gameSessionInfo.character_name = selectedPlayer.getName();
-			gameSessionInfo.hwid = "NO_HWID";//TODO: no support source
-			gameSessionInfo.char_dbid = selectedPlayer.getObjectId();
-			gameSessionInfo.account_dbid = selectedPlayer.getObjectId(); //TODO: same as char_dbid
-			gameSessionInfo.online_time = (int) selectedPlayer.getOnlineTime() / 1000;
-			gameSessionInfo.char_level = selectedPlayer.getLevel();
-			AntispamAPI.sendGameSessionInfo(antispamSession, gameSessionInfo);
-		}
+
+		// Antispam block
+		GameSessionInfo gameSessionInfo = new GameSessionInfo();
+		gameSessionInfo.account_name = getLogin();
+		gameSessionInfo.character_name = selectedPlayer.getName();
+		gameSessionInfo.hwid = "NO_HWID";//TODO: no support source
+		gameSessionInfo.char_dbid = selectedPlayer.getObjectId();
+		gameSessionInfo.account_dbid = selectedPlayer.getObjectId(); //TODO: same as char_dbid
+		gameSessionInfo.online_time = (int) selectedPlayer.getOnlineTime() / 1000;
+		gameSessionInfo.char_level = selectedPlayer.getLevel();
+		AntispamAPI.sendGameSessionInfo(getAntispamSession(), gameSessionInfo);
+
 		sendPacket(new CharSelected(selectedPlayer, getSessionKey().playOkID1));
 	}
 
 	@Override
 	public boolean encrypt(final ByteBuffer buf, final int size)
 	{
-		AntispamAPI.sendPacketData(this.getAntispamSession(), Direction.gameclient.value, buf.array(), buf.position(), size);
+		AntispamAPI.sendPacketData(getAntispamSession(), Direction.gameclient.value, buf.array(), buf.position(), size);
 		_crypt.encrypt(buf.array(), buf.position(), size);
 		buf.position(buf.position() + size);
 		return true;
@@ -353,7 +355,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 	public boolean decrypt(ByteBuffer buf, int size)
 	{
 		boolean success = _crypt.decrypt(buf.array(), buf.position(), size);
-		AntispamAPI.sendPacketData(this.getAntispamSession(), Direction.clientgame.value, buf.array(), buf.position(), size);
+		AntispamAPI.sendPacketData(getAntispamSession(), Direction.clientgame.value, buf.array(), buf.position(), size);
 		return success;
 	}
 
