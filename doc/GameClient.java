@@ -335,7 +335,7 @@ public class GameClient extends MMOClient<MMOConnection<GameClient>>
 		gameSessionInfo.hwid = "NO_HWID";//TODO: no support source
 		gameSessionInfo.char_dbid = selectedPlayer.getObjectId();
 		gameSessionInfo.account_dbid = selectedPlayer.getObjectId(); //TODO: same as char_dbid
-		gameSessionInfo.online_time = (int) selectedPlayer.getOnlineTime() / 1000;
+		gameSessionInfo.online_time = (int) (selectedPlayer.getOnlineTime() / 1000);
 		gameSessionInfo.char_level = selectedPlayer.getLevel();
 		AntispamAPI.sendGameSessionInfo(getAntispamSession(), gameSessionInfo);
 
