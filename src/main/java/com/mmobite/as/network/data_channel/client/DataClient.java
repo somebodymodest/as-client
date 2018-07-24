@@ -65,7 +65,7 @@ public class DataClient extends ITcpClient {
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .remoteAddress(host_, port_)
-                .handler(new LoggingHandler(LogLevel.INFO))
+                .handler(new LoggingHandler(LogLevel.ERROR))
                 .handler(new DataClientInitializer(handler_));
 
         handler_.setClient(this);
