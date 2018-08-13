@@ -19,11 +19,11 @@ public class SendGameSessionInfoPacket extends WritePacket {
         /*
         format: "csd"
             c - opcode
-            s - sAccountName[ACCOUNT_NAME_SIZE]
-            s - sCharName[CHARACTER_NAME_SIZE]
+            S - sAccountName[ACCOUNT_NAME_SIZE] UTF-16LE
+            S - sCharName[CHARACTER_NAME_SIZE] UTF-16LE
             d - nCharDbId
             d - nAccountId
-            S - hwid[DB_HWID_SIZE]
+            s - hwid[DB_HWID_SIZE] UTF-8
             d - player total online time in seconds
             d - player level
         */
